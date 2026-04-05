@@ -3,108 +3,163 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>OQlean — Premium Cleaning</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
-body {
-margin:0;
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
 font-family:'Inter',sans-serif;
 background:#0a0a0a;
-color:white;
+color:#fff;
 }
 
 /* NAV */
-.nav {
+.nav{
 position:fixed;
+top:0;
 width:100%;
-background:rgba(0,0,0,0.5);
-backdrop-filter:blur(10px);
 display:flex;
 justify-content:space-between;
-padding:20px 40px;
+padding:20px 80px;
+background:rgba(0,0,0,0.5);
+backdrop-filter:blur(14px);
 z-index:1000;
 }
 
-.nav a {
+.nav a{
+color:#aaa;
+margin-left:25px;
+text-decoration:none;
+transition:0.3s;
+}
+
+.nav a:hover{
 color:white;
-margin-left:15px;
-cursor:pointer;
 }
 
 /* HERO */
-.hero {
+.hero{
 height:100vh;
 display:flex;
 flex-direction:column;
 justify-content:center;
-padding-left:10%;
-background:url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c') center/cover;
+padding-left:12%;
+background:
+linear-gradient(180deg,rgba(0,0,0,0.4),#0a0a0a),
+url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c') center/cover;
 }
 
-h1 {font-size:60px;}
-.price {margin:20px 0;font-size:28px;}
+.hero h1{
+font-size:72px;
+font-weight:500;
+letter-spacing:-2px;
+}
 
-.btn {
-padding:15px 25px;
+.hero p{
+color:#999;
+margin:15px 0;
+font-size:18px;
+}
+
+.price{
+font-size:28px;
+margin:25px 0;
+}
+
+/* BUTTON */
+.btn{
+padding:16px 30px;
+border-radius:12px;
 background:white;
 color:black;
-border-radius:10px;
-margin-right:10px;
-cursor:pointer;
+text-decoration:none;
+margin-right:12px;
+transition:0.3s;
+font-weight:500;
+}
+
+.btn:hover{
+transform:translateY(-4px);
+background:#eaeaea;
 }
 
 /* SECTION */
-.section {padding:100px 10%;}
+.section{
+padding:140px 12%;
+}
 
-/* CARDS */
-.cards {
+/* TITLE */
+.title{
+font-size:34px;
+margin-bottom:40px;
+}
+
+/* GRID */
+.grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:25px;
+}
+
+/* CARD */
+.card{
+background:#111;
+padding:35px;
+border-radius:18px;
+transition:0.4s;
+border:1px solid #1a1a1a;
+}
+
+.card:hover{
+transform:translateY(-8px);
+background:#151515;
+}
+
+/* GALLERY */
+.gallery{
+display:grid;
+grid-template-columns:repeat(2,1fr);
 gap:20px;
 }
 
-.card {
-background:#141414;
-padding:25px;
-border-radius:15px;
-transition:0.3s;
-}
-.card:hover {transform:scale(1.05);}
-
-/* CALCULATOR */
-.calc input {
-padding:10px;
-margin:10px 0;
+.gallery img{
 width:100%;
+border-radius:16px;
+transition:0.4s;
 }
 
-/* POPUP */
-.popup {
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.8);
-display:none;
-justify-content:center;
-align-items:center;
-}
-
-.popup-content {
-background:#111;
-padding:30px;
-border-radius:15px;
+.gallery img:hover{
+transform:scale(1.03);
 }
 
 /* REVIEWS */
-.review {
-background:#141414;
-padding:20px;
-border-radius:10px;
-margin-bottom:15px;
+.review{
+color:#bbb;
+margin-bottom:20px;
+font-size:16px;
+}
+
+/* FOOTER */
+.footer{
+padding:80px 12%;
+border-top:1px solid #1a1a1a;
+color:#666;
+}
+
+/* ANIMATION */
+.fade{
+opacity:0;
+transform:translateY(40px);
+transition:1s;
+}
+
+.fade.show{
+opacity:1;
+transform:translateY(0);
 }
 </style>
 </head>
@@ -113,95 +168,81 @@ margin-bottom:15px;
 
 <!-- NAV -->
 <div class="nav">
-<div>OQlean</div>
+<div><b>OQlean</b></div>
 <div>
-<a onclick="scrollToSection('services')">Услуги</a>
-<a onclick="scrollToSection('calc')">Калькулятор</a>
-<a onclick="scrollToSection('reviews')">Отзывы</a>
-<a onclick="scrollToSection('contacts')">Контакты</a>
+<a href="#services">Услуги</a>
+<a href="#gallery">Работы</a>
+<a href="#reviews">Отзывы</a>
+<a href="#contacts">Контакты</a>
 </div>
 </div>
 
 <!-- HERO -->
 <div class="hero">
-<h1>Премиальная уборка</h1>
-<p>Ташкент • Безопасная химия</p>
+<h1>Чистота<br>премиум уровня</h1>
+<p>Ташкент • Безопасная химия • Идеальный результат</p>
+
 <div class="price">от 550 000 сум</div>
-<div class="btn" onclick="openPopup()">Заказать</div>
+
+<a class="btn" href="https://wa.me/998507572314">Заказать</a>
+<a class="btn" href="tel:+998507572314">Позвонить</a>
 </div>
 
 <!-- SERVICES -->
-<div class="section" id="services">
-<h2>Услуги</h2>
-<div class="cards">
+<div class="section fade" id="services">
+<div class="title">Услуги</div>
+
+<div class="grid">
 <div class="card">Поддерживающая уборка</div>
 <div class="card">Генеральная уборка</div>
 <div class="card">После ремонта</div>
 </div>
 </div>
 
-<!-- CALCULATOR -->
-<div class="section" id="calc">
-<h2>Рассчитать стоимость</h2>
+<!-- GALLERY -->
+<div class="section fade" id="gallery">
+<div class="title">До / После</div>
 
-<div class="calc">
-<input id="area" placeholder="Площадь (м²)">
-<select id="type">
-<option value="1">Поддерживающая</option>
-<option value="1.5">Генеральная</option>
-<option value="2">После ремонта</option>
-</select>
-
-<div class="btn" onclick="calc()">Рассчитать</div>
-<p id="result"></p>
+<div class="gallery">
+<img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952">
+<img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6">
+<img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c">
+<img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a">
 </div>
 </div>
 
 <!-- REVIEWS -->
-<div class="section" id="reviews">
-<h2>Отзывы клиентов</h2>
+<div class="section fade" id="reviews">
+<div class="title">Отзывы</div>
 
-<div class="review">Очень аккуратно убрали, как новая квартира — Азиз</div>
-<div class="review">Заказывал после ремонта, результат топ — Бек</div>
-<div class="review">Без запаха, чисто и быстро — Диана</div>
+<div class="review">“Квартира как новая, уровень топ” — Тимур</div>
+<div class="review">“Без запаха и очень аккуратно” — Алина</div>
+<div class="review">“После ремонта сделали идеально” — Шерзод</div>
 
 </div>
 
 <!-- CONTACT -->
-<div class="section" id="contacts">
-<h2>Контакты</h2>
-<p>+998 50 757 23 14</p>
+<div class="section fade" id="contacts">
+<div class="title">Контакты</div>
+
+<p>📞 +998 50 757 23 14</p>
+
+<a class="btn" href="https://wa.me/998507572314">WhatsApp</a>
+
 </div>
 
-<!-- POPUP -->
-<div class="popup" id="popup">
-<div class="popup-content">
-<h3>Оставить заявку</h3>
-<input placeholder="Ваш номер">
-<br><br>
-<div class="btn" onclick="closePopup()">Отправить</div>
-</div>
+<div class="footer">
+OQlean © 2026
 </div>
 
 <script>
-function scrollToSection(id){
-document.getElementById(id).scrollIntoView({behavior:'smooth'});
-}
+const observer=new IntersectionObserver(entries=>{
+entries.forEach(e=>{
+if(e.isIntersecting){e.target.classList.add('show')}
+})
+})
 
-function calc(){
-let area = document.getElementById('area').value;
-let type = document.getElementById('type').value;
-let price = area * 10000 * type;
-document.getElementById('result').innerText = "Пример: " + price + " сум";
-}
-
-function openPopup(){
-document.getElementById('popup').style.display='flex';
-}
-
-function closePopup(){
-document.getElementById('popup').style.display='none';
-}
+document.querySelectorAll('.fade').forEach(el=>observer.observe(el))
 </script>
 
 </body>
