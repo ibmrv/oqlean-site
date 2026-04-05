@@ -3,43 +3,38 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>OQlean — Premium Cleaning</title>
+<title>OQlean — Премиальный клининг</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-
 body{
 font-family:'Inter',sans-serif;
 background:#0a0a0a;
 color:#fff;
+scroll-behavior:smooth;
 }
 
 /* NAV */
 .nav{
 position:fixed;
-top:0;
 width:100%;
+top:0;
 display:flex;
 justify-content:space-between;
-padding:20px 80px;
+padding:20px 60px;
 background:rgba(0,0,0,0.5);
-backdrop-filter:blur(14px);
+backdrop-filter:blur(12px);
 z-index:1000;
 }
-
 .nav a{
 color:#aaa;
-margin-left:25px;
+margin-left:20px;
 text-decoration:none;
-transition:0.3s;
+transition:.3s;
 }
-
-.nav a:hover{
-color:white;
-}
+.nav a:hover{color:#fff}
 
 /* HERO */
 .hero{
@@ -49,54 +44,31 @@ flex-direction:column;
 justify-content:center;
 padding-left:12%;
 background:
-linear-gradient(180deg,rgba(0,0,0,0.4),#0a0a0a),
+linear-gradient(rgba(0,0,0,.5),#0a0a0a),
 url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c') center/cover;
 }
-
 .hero h1{
 font-size:72px;
-font-weight:500;
 letter-spacing:-2px;
 }
-
-.hero p{
-color:#999;
-margin:15px 0;
-font-size:18px;
-}
-
-.price{
-font-size:28px;
-margin:25px 0;
-}
+.hero p{color:#aaa;margin:10px 0}
+.price{font-size:28px;margin:20px 0}
 
 /* BUTTON */
 .btn{
-padding:16px 30px;
-border-radius:12px;
-background:white;
-color:black;
+padding:14px 28px;
+border-radius:10px;
+background:#fff;
+color:#000;
 text-decoration:none;
-margin-right:12px;
-transition:0.3s;
-font-weight:500;
+margin-right:10px;
+transition:.3s;
+cursor:pointer;
 }
-
-.btn:hover{
-transform:translateY(-4px);
-background:#eaeaea;
-}
+.btn:hover{transform:translateY(-4px)}
 
 /* SECTION */
-.section{
-padding:140px 12%;
-}
-
-/* TITLE */
-.title{
-font-size:34px;
-margin-bottom:40px;
-}
+.section{padding:120px 12%}
 
 /* GRID */
 .grid{
@@ -108,12 +80,10 @@ gap:25px;
 /* CARD */
 .card{
 background:#111;
-padding:35px;
-border-radius:18px;
-transition:0.4s;
-border:1px solid #1a1a1a;
+padding:30px;
+border-radius:16px;
+transition:.3s;
 }
-
 .card:hover{
 transform:translateY(-8px);
 background:#151515;
@@ -125,29 +95,45 @@ display:grid;
 grid-template-columns:repeat(2,1fr);
 gap:20px;
 }
-
 .gallery img{
 width:100%;
-border-radius:16px;
-transition:0.4s;
-}
-
-.gallery img:hover{
-transform:scale(1.03);
+border-radius:14px;
 }
 
 /* REVIEWS */
 .review{
-color:#bbb;
 margin-bottom:20px;
-font-size:16px;
+color:#bbb;
 }
 
-/* FOOTER */
-.footer{
-padding:80px 12%;
-border-top:1px solid #1a1a1a;
-color:#666;
+/* CALC */
+.calc input, .calc select{
+width:100%;
+padding:12px;
+margin:10px 0;
+background:#111;
+border:none;
+color:#fff;
+border-radius:8px;
+}
+
+/* POPUP */
+.popup{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.8);
+display:none;
+justify-content:center;
+align-items:center;
+}
+.popup-box{
+background:#111;
+padding:30px;
+border-radius:16px;
+width:300px;
 }
 
 /* ANIMATION */
@@ -156,7 +142,6 @@ opacity:0;
 transform:translateY(40px);
 transition:1s;
 }
-
 .fade.show{
 opacity:1;
 transform:translateY(0);
@@ -172,6 +157,7 @@ transform:translateY(0);
 <div>
 <a href="#services">Услуги</a>
 <a href="#gallery">Работы</a>
+<a href="#calc">Цена</a>
 <a href="#reviews">Отзывы</a>
 <a href="#contacts">Контакты</a>
 </div>
@@ -180,18 +166,18 @@ transform:translateY(0);
 <!-- HERO -->
 <div class="hero">
 <h1>Чистота<br>премиум уровня</h1>
-<p>Ташкент • Безопасная химия • Идеальный результат</p>
-
+<p>Ташкент • Без запаха • Безопасно</p>
 <div class="price">от 550 000 сум</div>
 
-<a class="btn" href="https://wa.me/998507572314">Заказать</a>
-<a class="btn" href="tel:+998507572314">Позвонить</a>
+<div>
+<span class="btn" onclick="openPopup()">Заказать</span>
+<a class="btn" href="https://wa.me/998507572314">WhatsApp</a>
+</div>
 </div>
 
 <!-- SERVICES -->
 <div class="section fade" id="services">
-<div class="title">Услуги</div>
-
+<h2>Услуги</h2>
 <div class="grid">
 <div class="card">Поддерживающая уборка</div>
 <div class="card">Генеральная уборка</div>
@@ -201,8 +187,7 @@ transform:translateY(0);
 
 <!-- GALLERY -->
 <div class="section fade" id="gallery">
-<div class="title">До / После</div>
-
+<h2>До / После</h2>
 <div class="gallery">
 <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952">
 <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6">
@@ -211,38 +196,68 @@ transform:translateY(0);
 </div>
 </div>
 
+<!-- CALCULATOR -->
+<div class="section fade" id="calc">
+<h2>Рассчитать стоимость</h2>
+
+<div class="calc">
+<input id="area" placeholder="Площадь (м²)">
+<select id="type">
+<option value="1">Поддерживающая</option>
+<option value="1.5">Генеральная</option>
+<option value="2">После ремонта</option>
+</select>
+
+<div class="btn" onclick="calc()">Рассчитать</div>
+<p id="result"></p>
+</div>
+</div>
+
 <!-- REVIEWS -->
 <div class="section fade" id="reviews">
-<div class="title">Отзывы</div>
-
-<div class="review">“Квартира как новая, уровень топ” — Тимур</div>
-<div class="review">“Без запаха и очень аккуратно” — Алина</div>
-<div class="review">“После ремонта сделали идеально” — Шерзод</div>
-
+<h2>Отзывы</h2>
+<div class="review">“Квартира как новая” — Тимур</div>
+<div class="review">“Реально премиум уровень” — Алина</div>
+<div class="review">“После ремонта идеально” — Шерзод</div>
 </div>
 
 <!-- CONTACT -->
 <div class="section fade" id="contacts">
-<div class="title">Контакты</div>
-
+<h2>Контакты</h2>
 <p>📞 +998 50 757 23 14</p>
-
-<a class="btn" href="https://wa.me/998507572314">WhatsApp</a>
-
+<a class="btn" href="https://wa.me/998507572314">Написать</a>
 </div>
 
-<div class="footer">
-OQlean © 2026
+<!-- POPUP -->
+<div class="popup" id="popup">
+<div class="popup-box">
+<h3>Оставить заявку</h3>
+<input placeholder="Ваш номер">
+<br><br>
+<div class="btn" onclick="closePopup()">Отправить</div>
+</div>
 </div>
 
 <script>
-const observer=new IntersectionObserver(entries=>{
-entries.forEach(e=>{
-if(e.isIntersecting){e.target.classList.add('show')}
-})
-})
+function calc(){
+let a=document.getElementById('area').value;
+let t=document.getElementById('type').value;
+document.getElementById('result').innerText="≈ "+a*10000*t+" сум";
+}
 
-document.querySelectorAll('.fade').forEach(el=>observer.observe(el))
+function openPopup(){
+document.getElementById('popup').style.display='flex';
+}
+function closePopup(){
+document.getElementById('popup').style.display='none';
+}
+
+const obs=new IntersectionObserver(e=>{
+e.forEach(x=>{
+if(x.isIntersecting){x.target.classList.add('show')}
+})
+});
+document.querySelectorAll('.fade').forEach(el=>obs.observe(el));
 </script>
 
 </body>
