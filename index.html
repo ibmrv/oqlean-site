@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>OQlean — Premium Cleaning</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -12,33 +13,33 @@
 
 body{
 font-family:'Inter',sans-serif;
-background:#0b0b0b;
+background:#0a0a0a;
 color:#fff;
 }
 
 /* NAV */
 .nav{
 position:fixed;
-top:0;
 width:100%;
+top:0;
 display:flex;
 justify-content:space-between;
-padding:20px 60px;
-background:rgba(0,0,0,0.6);
-backdrop-filter:blur(12px);
+padding:20px 80px;
+background:rgba(0,0,0,0.5);
+backdrop-filter:blur(14px);
 z-index:1000;
 }
 
-.nav img{height:28px;}
+.nav img{height:26px;}
 
 .nav a{
 color:#aaa;
-margin-left:20px;
+margin-left:25px;
 text-decoration:none;
-transition:.3s;
+transition:0.3s;
 }
 
-.nav a:hover{color:#fff}
+.nav a:hover{color:white}
 
 /* HERO */
 .hero{
@@ -46,79 +47,90 @@ height:100vh;
 display:flex;
 flex-direction:column;
 justify-content:center;
-align-items:flex-start;
 padding-left:12%;
 background:
-linear-gradient(rgba(0,0,0,.6),#0b0b0b),
+linear-gradient(rgba(0,0,0,0.6),#0a0a0a),
 url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c') center/cover;
 }
 
 .hero img{
-width:180px;
-margin-bottom:30px;
+width:170px;
+margin-bottom:25px;
 opacity:0.9;
 }
 
 .hero h1{
-font-size:64px;
+font-size:70px;
 font-weight:500;
+letter-spacing:-2px;
 }
 
 .hero p{
-color:#aaa;
+color:#999;
 margin:15px 0;
+font-size:18px;
 }
 
 .price{
-font-size:26px;
-margin:20px 0;
+font-size:28px;
+margin:25px 0;
 }
 
-/* BTN */
+/* BUTTON */
 .btn{
-padding:14px 28px;
-border-radius:10px;
-background:#fff;
-color:#000;
+padding:15px 28px;
+border-radius:12px;
+background:white;
+color:black;
 text-decoration:none;
-margin-right:10px;
-transition:.3s;
+margin-right:12px;
+transition:0.3s;
+font-weight:500;
 cursor:pointer;
 }
 
 .btn:hover{
 transform:translateY(-4px);
+background:#eaeaea;
 }
 
 /* SECTION */
 .section{
-padding:120px 12%;
+padding:140px 12%;
 }
 
+/* TITLE */
 .title{
-font-size:32px;
-margin-bottom:30px;
+font-size:36px;
+margin-bottom:40px;
 }
 
 /* GRID */
 .grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-gap:25px;
+gap:30px;
 }
 
 /* CARD */
 .card{
 background:#111;
-padding:30px;
-border-radius:16px;
-border:1px solid rgba(255,255,255,0.05);
-transition:.3s;
+padding:35px;
+border-radius:18px;
+border:1px solid #1a1a1a;
+transition:0.4s;
 }
 
 .card:hover{
-transform:translateY(-8px);
+transform:translateY(-10px);
 background:#151515;
+}
+
+/* BIG TEXT BLOCK */
+.big-text{
+font-size:32px;
+max-width:700px;
+line-height:1.4;
 }
 
 /* GALLERY */
@@ -130,45 +142,20 @@ gap:20px;
 
 .gallery img{
 width:100%;
-border-radius:14px;
+border-radius:16px;
+transition:0.4s;
+}
+
+.gallery img:hover{
+transform:scale(1.03);
 }
 
 /* REVIEWS */
 .review{
-margin-bottom:25px;
+margin-bottom:30px;
 color:#bbb;
-line-height:1.6;
-}
-
-/* CALC */
-.calc input,.calc select{
-width:100%;
-padding:12px;
-margin:10px 0;
-background:#111;
-border:none;
-color:#fff;
-border-radius:8px;
-}
-
-/* POPUP */
-.popup{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,.85);
-display:none;
-justify-content:center;
-align-items:center;
-}
-
-.popup-box{
-background:#111;
-padding:30px;
-border-radius:16px;
-width:300px;
+line-height:1.7;
+font-size:16px;
 }
 
 /* FOOTER */
@@ -178,7 +165,7 @@ border-top:1px solid #1a1a1a;
 color:#666;
 }
 
-/* ANIM */
+/* ANIMATION */
 .fade{
 opacity:0;
 transform:translateY(40px);
@@ -199,8 +186,7 @@ transform:translateY(0);
 <img src="logo.png">
 <div>
 <a href="#services">Услуги</a>
-<a href="#gallery">Кейсы</a>
-<a href="#calc">Цена</a>
+<a href="#gallery">Работы</a>
 <a href="#reviews">Отзывы</a>
 <a href="#contacts">Контакты</a>
 </div>
@@ -210,25 +196,24 @@ transform:translateY(0);
 <div class="hero">
 <img src="logo.png">
 
-<h1>Чистота без компромиссов</h1>
+<h1>Чистота премиум уровня</h1>
 
-<p>Премиальный клининг в Ташкенте  
-Без запаха • Безопасно • Идеальный результат</p>
+<p>Без запаха • Безопасная химия • Результат как в отеле</p>
 
 <div class="price">от 550 000 сум</div>
 
 <div>
-<span class="btn" onclick="openPopup()">Заказать</span>
-<a class="btn" href="https://wa.me/998507572314">WhatsApp</a>
+<a class="btn" href="https://wa.me/998507572314">Заказать уборку</a>
 </div>
 </div>
 
 <!-- BRAND BLOCK -->
 <div class="section fade">
-<h2 style="max-width:600px;">
-Мы не просто убираем —  
-мы возвращаем ощущение нового пространства
-</h2>
+<div class="big-text">
+Мы не просто убираем квартиру —  
+мы возвращаем ощущение нового пространства  
+и чистоты, в котором приятно жить
+</div>
 </div>
 
 <!-- SERVICES -->
@@ -244,7 +229,7 @@ transform:translateY(0);
 
 <div class="card">
 <h3>Генеральная уборка</h3>
-<p>Глубокая очистка всех зон</p>
+<p>Глубокая очистка всех зон и поверхностей</p>
 </div>
 
 <div class="card">
@@ -271,9 +256,21 @@ transform:translateY(0);
 <div class="section fade" id="reviews">
 <div class="title">Отзывы</div>
 
-<div class="review">После ремонта квартира была в ужасном состоянии. Сделали идеально.</div>
-<div class="review">Реально премиум уровень, всё аккуратно.</div>
-<div class="review">Без запаха и очень чисто, рекомендую.</div>
+<div class="review">
+После ремонта квартира была в ужасном состоянии.  
+Сделали так, что стало лучше чем было изначально.  
+Очень аккуратно, без запаха и видно что работают профессионально.
+</div>
+
+<div class="review">
+Заказывал генеральную уборку — честно не ожидал такого уровня.  
+Все идеально, даже мелочи. Буду обращаться ещё.
+</div>
+
+<div class="review">
+Очень важно было чтобы без химического запаха.  
+Сделали идеально, можно сразу жить. Рекомендую.
+</div>
 
 </div>
 
@@ -294,15 +291,15 @@ OQlean © 2026
 </div>
 
 <script>
-function openPopup(){document.querySelector('.popup').style.display='flex'}
-function closePopup(){document.querySelector('.popup').style.display='none'}
-
-const obs=new IntersectionObserver(e=>{
-e.forEach(x=>{
-if(x.isIntersecting){x.target.classList.add('show')}
-})
+const observer=new IntersectionObserver(entries=>{
+entries.forEach(entry=>{
+if(entry.isIntersecting){
+entry.target.classList.add('show');
+}
 });
-document.querySelectorAll('.fade').forEach(el=>obs.observe(el));
+});
+
+document.querySelectorAll('.fade').forEach(el=>observer.observe(el));
 </script>
 
 </body>
