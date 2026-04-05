@@ -3,87 +3,108 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OQlean</title>
+<title>OQlean — Premium Cleaning</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
 body {
-    margin: 0;
-    font-family: 'Inter', sans-serif;
-    background: #0a0a0a;
-    color: white;
+margin:0;
+font-family:'Inter',sans-serif;
+background:#0a0a0a;
+color:white;
 }
 
 /* NAV */
 .nav {
-    position: fixed;
-    width: 100%;
-    background: #000;
-    padding: 15px 30px;
-    display: flex;
-    justify-content: space-between;
-    z-index: 1000;
+position:fixed;
+width:100%;
+background:rgba(0,0,0,0.5);
+backdrop-filter:blur(10px);
+display:flex;
+justify-content:space-between;
+padding:20px 40px;
+z-index:1000;
 }
 
 .nav a {
-    color: white;
-    margin: 0 10px;
-    cursor: pointer;
-    text-decoration: none;
-}
-
-/* PAGE */
-.page {
-    display: none;
-    padding: 100px 20px;
-    max-width: 1100px;
-    margin: auto;
-}
-
-.active {
-    display: block;
+color:white;
+margin-left:15px;
+cursor:pointer;
 }
 
 /* HERO */
 .hero {
-    height: 100vh;
-    background: url('https://images.unsplash.com/photo-1581578731548-c64695cc6952') center/cover;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+padding-left:10%;
+background:url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c') center/cover;
 }
 
-/* BUTTON */
+h1 {font-size:60px;}
+.price {margin:20px 0;font-size:28px;}
+
 .btn {
-    padding: 15px 25px;
-    background: white;
-    color: black;
-    border-radius: 10px;
-    margin: 10px;
-    text-decoration: none;
+padding:15px 25px;
+background:white;
+color:black;
+border-radius:10px;
+margin-right:10px;
+cursor:pointer;
 }
+
+/* SECTION */
+.section {padding:100px 10%;}
 
 /* CARDS */
 .cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
 }
 
 .card {
-    background: #141414;
-    padding: 20px;
-    border-radius: 15px;
-    cursor: pointer;
+background:#141414;
+padding:25px;
+border-radius:15px;
+transition:0.3s;
+}
+.card:hover {transform:scale(1.05);}
+
+/* CALCULATOR */
+.calc input {
+padding:10px;
+margin:10px 0;
+width:100%;
 }
 
-/* DETAIL */
-.detail {
-    margin-top: 20px;
-    display: none;
-    color: #ccc;
+/* POPUP */
+.popup {
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.8);
+display:none;
+justify-content:center;
+align-items:center;
+}
+
+.popup-content {
+background:#111;
+padding:30px;
+border-radius:15px;
+}
+
+/* REVIEWS */
+.review {
+background:#141414;
+padding:20px;
+border-radius:10px;
+margin-bottom:15px;
 }
 </style>
 </head>
@@ -92,80 +113,94 @@ body {
 
 <!-- NAV -->
 <div class="nav">
-<div><b>OQlean</b></div>
+<div>OQlean</div>
 <div>
-<a onclick="showPage('home')">Главная</a>
-<a onclick="showPage('services')">Услуги</a>
-<a onclick="showPage('prices')">Цены</a>
-<a onclick="showPage('contacts')">Контакты</a>
+<a onclick="scrollToSection('services')">Услуги</a>
+<a onclick="scrollToSection('calc')">Калькулятор</a>
+<a onclick="scrollToSection('reviews')">Отзывы</a>
+<a onclick="scrollToSection('contacts')">Контакты</a>
 </div>
 </div>
 
-<!-- HOME -->
-<div id="home" class="page active">
+<!-- HERO -->
 <div class="hero">
-<h1>OQlean</h1>
-<p>Премиальная уборка в Ташкенте</p>
-<h2>от 550 000 сум</h2>
-<a class="btn" href="https://wa.me/998507572314">Заказать</a>
-</div>
+<h1>Премиальная уборка</h1>
+<p>Ташкент • Безопасная химия</p>
+<div class="price">от 550 000 сум</div>
+<div class="btn" onclick="openPopup()">Заказать</div>
 </div>
 
 <!-- SERVICES -->
-<div id="services" class="page">
+<div class="section" id="services">
 <h2>Услуги</h2>
-
 <div class="cards">
-
-<div class="card" onclick="toggleDetail(this)">
-<b>Поддерживающая уборка</b>
-<div class="detail">Включает все поверхности, полы, кухню и санузел</div>
+<div class="card">Поддерживающая уборка</div>
+<div class="card">Генеральная уборка</div>
+<div class="card">После ремонта</div>
+</div>
 </div>
 
-<div class="card" onclick="toggleDetail(this)">
-<b>Генеральная уборка</b>
-<div class="detail">Полная глубокая очистка помещения</div>
+<!-- CALCULATOR -->
+<div class="section" id="calc">
+<h2>Рассчитать стоимость</h2>
+
+<div class="calc">
+<input id="area" placeholder="Площадь (м²)">
+<select id="type">
+<option value="1">Поддерживающая</option>
+<option value="1.5">Генеральная</option>
+<option value="2">После ремонта</option>
+</select>
+
+<div class="btn" onclick="calc()">Рассчитать</div>
+<p id="result"></p>
+</div>
 </div>
 
-<div class="card" onclick="toggleDetail(this)">
-<b>После ремонта</b>
-<div class="detail">Удаление строительной пыли и грязи</div>
-</div>
+<!-- REVIEWS -->
+<div class="section" id="reviews">
+<h2>Отзывы клиентов</h2>
+
+<div class="review">Очень аккуратно убрали, как новая квартира — Азиз</div>
+<div class="review">Заказывал после ремонта, результат топ — Бек</div>
+<div class="review">Без запаха, чисто и быстро — Диана</div>
 
 </div>
 
-</div>
-
-<!-- PRICES -->
-<div id="prices" class="page">
-<h2>Цены</h2>
-<p>До 60 м² — фиксированная цена</p>
-<p>Более 60 м² — индивидуально</p>
-<h3>от 550 000 сум</h3>
-</div>
-
-<!-- CONTACTS -->
-<div id="contacts" class="page">
+<!-- CONTACT -->
+<div class="section" id="contacts">
 <h2>Контакты</h2>
-<p>📞 +998 50 757 23 14</p>
+<p>+998 50 757 23 14</p>
+</div>
 
-<a class="btn" href="https://wa.me/998507572314">WhatsApp</a>
-
+<!-- POPUP -->
+<div class="popup" id="popup">
+<div class="popup-content">
+<h3>Оставить заявку</h3>
+<input placeholder="Ваш номер">
 <br><br>
-
-<a href="#">Instagram</a> | 
-<a href="#">Telegram</a>
+<div class="btn" onclick="closePopup()">Отправить</div>
+</div>
 </div>
 
 <script>
-function showPage(id) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
+function scrollToSection(id){
+document.getElementById(id).scrollIntoView({behavior:'smooth'});
 }
 
-function toggleDetail(el) {
-    let d = el.querySelector('.detail');
-    d.style.display = d.style.display === 'block' ? 'none' : 'block';
+function calc(){
+let area = document.getElementById('area').value;
+let type = document.getElementById('type').value;
+let price = area * 10000 * type;
+document.getElementById('result').innerText = "Пример: " + price + " сум";
+}
+
+function openPopup(){
+document.getElementById('popup').style.display='flex';
+}
+
+function closePopup(){
+document.getElementById('popup').style.display='none';
 }
 </script>
 
