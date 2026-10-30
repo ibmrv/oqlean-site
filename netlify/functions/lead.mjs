@@ -18,6 +18,8 @@ export default async (req) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ chat_id: TG_CHAT_ID, text, parse_mode: "HTML", disable_web_page_preview: true }),
   });
-  return r.ok ? Response.json({ ok: true }) : new Response("Telegram error", { status: 502 });
+  if (r.ok) return Response.json({ ok: true });
+  const t = await r.json().catch(() => ({}));
+  return new Response("Telegram error: " + (t.error_code || r.status) + " " + (t.description || ""), { status: 502 });
 };
 export const config = { path: "/api/lead" };
