@@ -11,7 +11,8 @@ export default async (req) => {
   const esc = (s) => String(s).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
   const body = String(d.text || "").slice(0, 3000);
   const text = `🧽 <b>Новая заявка с сайта</b>\n\n${esc(body)}\n\n🌐 ${d.lang === "uz" ? "UZ" : "RU"} · oqlean.uz`;
-  const { TG_TOKEN, TG_CHAT_ID } = process.env;
+  const TG_TOKEN = String(process.env.TG_TOKEN || "").trim().replace(/^bot/i, "").replace(/[\s"'`]/g, "");
+  const TG_CHAT_ID = String(process.env.TG_CHAT_ID || "").trim();
   if (!TG_TOKEN || !TG_CHAT_ID) return new Response("Not configured", { status: 500 });
   const r = await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
     method: "POST",
