@@ -525,7 +525,7 @@ $("lf").addEventListener("submit",async e=>{e.preventDefault();const s=S[st.lang
   if(!f.name||f.phone.replace(/\D/g,"").length<9){$("fErr").textContent=s.err;$("fErr").hidden=false;return}
   $("fErr").hidden=true;const btn=$("fBtn");btn.disabled=true;btn.firstElementChild.textContent=s.sending;
   const text=message(f);let sent=false;
-  try{const r=await fetch("/api/lead",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({company:$("fHp").value,text,lang:st.lang,type:st.type,total:isFlat()?total():null,...f})});sent=r.ok}catch(err){}
+  try{const r=await fetch("/api/lead",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({company:$("fHp").value,text,lang:st.lang,type:st.type,total:isFlat()?total():null,rooms:isFlat()?st.rooms:null,baths:isFlat()?st.baths:null,options:isFlat()?OPTIONS.filter(o=>st.opts[o.id]).map(o=>o.ru):KINDS[st.type].ru.filter((k,i)=>st.kinds[st.type+i]),...f})});sent=r.ok}catch(err){}
   btn.disabled=false;btn.firstElementChild.textContent=tx("f_s");
   $("lf").hidden=true;$("done").hidden=false;
   $("dTitle").textContent=sent?s.reqT:s.failT;$("dText").textContent=sent?s.reqP:s.failP;

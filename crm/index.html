@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>OQlean CRM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600&family=Manrope:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: work tool. Sticky top bar with tabs, period switch, dense lists, side drawer for editing. */
+:root{
+  --bg:#F3F6F5; --surface:#FFFFFF; --ink:#101615; --muted:#5B6764; --line:#DCE4E1; --soft:#EAF0EE;
+  --accent:#0C6B5C; --mint:#BFEDE2; --good:#1E7A4F; --warn:#A86A00; --bad:#B4372F;
+  --display:"Unbounded","Manrope",system-ui,sans-serif; --body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0D1211;--surface:#151C1B;--ink:#E9F0EE;--muted:#9AA9A5;--line:#27312F;--soft:#1B2422;--accent:#8FE0CF;--mint:#1E4A42;--good:#6FD3A0;--warn:#F0B54A;--bad:#FF8E84;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0D1211;--surface:#151C1B;--ink:#E9F0EE;--muted:#9AA9A5;--line:#27312F;--soft:#1B2422;--accent:#8FE0CF;--mint:#1E4A42;--good:#6FD3A0;--warn:#F0B54A;--bad:#FF8E84;color-scheme:dark}
+*{box-sizing:border-box}
+html{padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:500 15px/1.45 var(--body);-webkit-font-smoothing:antialiased}
+[hidden]{display:none!important}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:8px}
+.num{font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.wrap{max-width:1240px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{margin:0;letter-spacing:-.01em}
+h2{font-size:20px;font-weight:800}
+h3{font-size:15px;font-weight:800}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:0 16px;border-radius:10px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);font-weight:700;cursor:pointer;white-space:nowrap}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.small{min-height:32px;padding:0 10px;font-size:13px;border-radius:8px}
+.btn.danger{background:transparent;color:var(--bad);border-color:color-mix(in srgb,var(--bad) 40%,transparent)}
+.btn:disabled{opacity:.5;cursor:default}
+input,select,textarea{width:100%;min-width:0;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:9px 12px;font-size:15px}
+textarea{resize:vertical;min-height:70px}
+label.f{display:grid;gap:4px;font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.02em;min-width:0}
+label.f>input,label.f>select,label.f>textarea{font-weight:600;color:var(--ink);letter-spacing:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media(max-width:560px){.grid3{grid-template-columns:1fr 1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px}
+
+/* auth */
+.auth{min-height:100vh;display:grid;place-items:center;padding:24px 16px}
+.auth .card{width:min(420px,100%);padding:28px;display:grid;gap:14px}
+.logo{font-family:var(--display);font-weight:600;font-size:20px;letter-spacing:-.02em}
+.logo small{font-family:var(--body);font-size:12px;font-weight:700;color:var(--accent);margin-left:6px;letter-spacing:.06em}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:3px}
+.seg button{flex:1;border:0;background:none;padding:8px;border-radius:8px;font-weight:700;color:var(--muted);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.msg{font-size:14px;padding:10px 12px;border-radius:10px;background:var(--soft)}
+.msg.err{color:var(--bad)}
+
+/* shell */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:var(--surface)}
+.top{display:flex;align-items:center;gap:16px;height:58px}
+.top .who{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);min-width:0}
+.top .who b{color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px}
+.role{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:3px 7px;border-radius:6px;background:var(--mint);color:var(--accent)}
+nav.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding-bottom:8px}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs button{border:0;background:none;padding:8px 12px;border-radius:8px;font-weight:700;color:var(--muted);cursor:pointer;white-space:nowrap}
+nav.tabs button[aria-current="page"]{background:var(--soft);color:var(--ink)}
+nav.tabs button .ct{font-size:11px;background:var(--bad);color:#fff;border-radius:999px;padding:1px 6px;margin-left:4px}
+main{padding-block:20px 60px}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:16px}
+.bar .l{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700;cursor:pointer;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.chip em{font-style:normal;opacity:.7;margin-left:4px}
+select.period{width:auto;font-weight:700}
+.search{max-width:260px}
+
+/* KPIs */
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:14px}
+@media(max-width:900px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.kpi{padding:14px 16px;display:grid;gap:4px;min-width:0}
+.kpi span{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.02em}
+.kpi b{font-family:var(--display);font-weight:600;font-size:clamp(20px,2.4vw,26px);letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kpi small{font-size:12px;color:var(--muted)}
+.kpi.pos b{color:var(--good)} .kpi.neg b{color:var(--bad)}
+.panels{display:grid;gap:14px;grid-template-columns:1fr 1fr}
+@media(max-width:900px){.panels{grid-template-columns:1fr}}
+.panel{padding:16px 18px;display:grid;gap:12px;align-content:start;min-width:0}
+.bars{display:grid;gap:9px}
+.brow{display:grid;grid-template-columns:minmax(90px,150px) 1fr auto;gap:10px;align-items:center;font-size:13px}
+.brow .t{height:10px;background:var(--soft);border-radius:999px;overflow:hidden}
+.brow .t i{display:block;height:100%;background:var(--accent);border-radius:999px}
+.brow b{font-variant-numeric:tabular-nums;text-align:right;min-width:3ch}
+.funnel .brow{grid-template-columns:minmax(110px,150px) 1fr 110px}
+.funnel .brow small{color:var(--muted);font-weight:600}
+@media(max-width:560px){.brow{grid-template-columns:88px 1fr auto}.funnel .brow{grid-template-columns:88px 1fr 64px}}
+.tbl{width:100%;border-collapse:collapse;font-size:14px}
+.tbl th{text-align:left;font-size:12px;color:var(--muted);font-weight:700;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+.tbl td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl tr.click{cursor:pointer}
+.tbl tr.click:hover td{background:var(--soft)}
+.tbl td.r,.tbl th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.scroll{overflow-x:auto}
+.empty{padding:28px;text-align:center;color:var(--muted)}
+
+/* status pills */
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:800;padding:3px 8px;border-radius:999px;white-space:nowrap;background:var(--soft);color:var(--muted)}
+.pill.new{background:color-mix(in srgb,#2F6FEB 15%,transparent);color:#2F6FEB}
+.pill.contacted,.pill.scheduled{background:color-mix(in srgb,var(--warn) 16%,transparent);color:var(--warn)}
+.pill.booked{background:var(--mint);color:var(--accent)}
+.pill.done{background:color-mix(in srgb,var(--good) 16%,transparent);color:var(--good)}
+.pill.lost,.pill.cancelled{background:color-mix(in srgb,var(--bad) 13%,transparent);color:var(--bad)}
+.pill.paid{background:color-mix(in srgb,var(--good) 16%,transparent);color:var(--good)}
+.pill.unpaid{background:color-mix(in srgb,var(--warn) 16%,transparent);color:var(--warn)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .pill.new{color:#8DB4FF}}
+:root[data-theme="dark"] .pill.new{color:#8DB4FF}
+
+/* mobile lists: tables become cards */
+@media(max-width:700px){
+  .tbl.cards thead{display:none}
+  .tbl.cards tr{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:12px;border-bottom:1px solid var(--line)}
+  .tbl.cards td{padding:0;border:0}
+  .tbl.cards td.hide-m{display:none}
+}
+
+/* drawer */
+.scrim{position:fixed;inset:0;background:rgba(10,15,14,.35);z-index:40}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(560px,100%);background:var(--bg);z-index:41;display:flex;flex-direction:column;box-shadow:-20px 0 60px rgba(0,0,0,.18)}
+.dh{display:flex;align-items:center;gap:10px;padding:calc(14px + env(safe-area-inset-top,0px)) max(18px,env(safe-area-inset-right,0px)) 14px 18px;border-bottom:1px solid var(--line);background:var(--surface)}
+.dh h2{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.db{overflow-y:auto;padding:18px max(18px,env(safe-area-inset-right,0px)) calc(28px + env(safe-area-inset-bottom,0px)) 18px;display:grid;gap:16px;align-content:start}
+.sbtns{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.sbtns button{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:9px;font-weight:700;cursor:pointer;font-size:14px}
+.sbtns button[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.tl{display:grid;gap:8px;list-style:none;padding:0;margin:0}
+.tl li{font-size:13px;display:grid;gap:2px;padding:10px 12px;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+.tl li small{color:var(--muted);font-weight:600}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:14px}
+.kv dt{color:var(--muted);font-weight:600}
+.kv dd{margin:0;font-weight:600;min-width:0;overflow-wrap:anywhere}
+.cbox{display:flex;flex-wrap:wrap;gap:6px}
+.cbox label{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700;cursor:pointer;background:var(--surface)}
+.cbox input{width:auto;margin:0}
+.cbox label:has(input:checked){background:var(--mint);border-color:var(--accent)}
+.payrow{display:grid;grid-template-columns:1fr 140px auto;gap:8px;align-items:center;font-size:14px;font-weight:600}
+.payrow label{display:flex;gap:6px;align-items:center;font-size:13px}
+.payrow input[type=checkbox]{width:auto}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:700;z-index:60;font-size:14px;max-width:calc(100% - 32px)}
+.setup{max-width:640px;margin:10vh auto;padding:28px}
+.setup code{background:var(--soft);padding:2px 6px;border-radius:6px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+</head>
+<body>
+
+<div id="boot" class="auth"><p class="muted">Загрузка…</p></div>
+
+<div id="setup" class="wrap" hidden><div class="card setup">
+  <div class="logo">OQlean <small>CRM</small></div>
+  <h2 style="margin-top:14px">CRM ещё не подключена к базе</h2>
+  <p class="muted">Добавьте в Netlify переменные <code>SUPABASE_URL</code>, <code>SUPABASE_ANON_KEY</code> и <code>SUPABASE_SERVICE_KEY</code>, затем перезапустите деплой.</p>
+</div></div>
+
+<div id="auth" class="auth" hidden><form class="card" id="authForm" novalidate>
+  <div class="logo">OQlean <small>CRM</small></div>
+  <div class="seg" role="group"><button type="button" data-mode="in" aria-pressed="true">Вход</button><button type="button" data-mode="up" aria-pressed="false">Регистрация</button></div>
+  <label class="f" id="nameRow" hidden>Имя<input id="aName" autocomplete="name" placeholder="Как вас подписывать в заявках"></label>
+  <label class="f">Почта<input id="aEmail" type="email" autocomplete="email" placeholder="name@mail.com"></label>
+  <label class="f">Пароль<input id="aPass" type="password" autocomplete="current-password" placeholder="Минимум 6 символов"></label>
+  <p class="msg" id="aMsg" hidden></p>
+  <button class="btn" type="submit" id="aBtn">Войти</button>
+</form></div>
+
+<div id="wait" class="auth" hidden><div class="card" style="padding:28px;display:grid;gap:12px;width:min(420px,100%)">
+  <div class="logo">OQlean <small>CRM</small></div>
+  <h2>Доступ ждёт одобрения</h2>
+  <p class="muted">Администратор должен подтвердить ваш аккаунт во вкладке «Команда». После этого обновите страницу.</p>
+  <button class="btn ghost" type="button" data-act="logout">Выйти</button>
+</div></div>
+
+<div id="app" hidden>
+  <header><div class="wrap">
+    <div class="top"><div class="logo">OQlean <small>CRM</small></div>
+      <div class="who"><b id="uName"></b><span class="role" id="uRole"></span><button class="btn ghost small" type="button" data-act="logout">Выйти</button></div></div>
+    <nav class="tabs" id="tabs" aria-label="Разделы">
+      <button type="button" data-tab="dash" aria-current="page">Дашборд</button>
+      <button type="button" data-tab="leads">Лиды<span class="ct" id="newCt" hidden></span></button>
+      <button type="button" data-tab="orders">Заказы</button>
+      <button type="button" data-tab="cleaners">Клинеры</button>
+      <button type="button" data-tab="money" data-admin>Расходы и выплаты</button>
+      <button type="button" data-tab="team" data-admin>Команда</button>
+    </nav>
+  </div></header>
+  <main class="wrap" id="view"></main>
+</div>
+
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" hidden aria-modal="true" role="dialog"><div class="dh"><h2 id="dTitle"></h2><button class="btn ghost small" type="button" data-act="close">Закрыть</button></div><div class="db" id="dBody"></div></aside>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+/* ---------- constants ---------- */
+const LS={new:"🆕 Новая",contacted:"📞 Связались",ndz:"📵 НДЗ",booked:"📅 Записан",done:"✅ Выполнена",later:"⏸ Позже",lost:"❌ Отказ"};
+const LS_ORDER=["new","contacted","ndz","booked","done","later","lost"];
+const SVC={standard:"Поддерживающая",deep:"Генеральная",reno:"После ремонта",dry:"Химчистка",office:"Офис / ЖК"};
+const SRC={site:"Сайт",instagram:"Instagram",telegram:"Telegram",phone:"Звонок",referral:"Рекомендация",other:"Другое"};
+const OS={scheduled:"Запланирован",done:"Выполнен",cancelled:"Отменён"};
+const EXP={chemicals:"Химия и расходники",ads:"Реклама",transport:"Транспорт",equipment:"Инвентарь",partner:"Партнёрам",salary:"Зарплата / офис",other:"Другое"};
+const PERIODS={month:"Этот месяц",prev:"Прошлый месяц",d7:"7 дней",d30:"30 дней",all:"Всё время"};
+
+/* ---------- state ---------- */
+let sb=null,me=null;
+const S={tab:"dash",period:"month",leadFilter:"all",orderFilter:"upcoming",q:"",leads:[],orders:[],oc:[],cleaners:[],payouts:[],expenses:[],profiles:[]};
+try{const p=localStorage.getItem("oqcrm_period");if(p&&PERIODS[p])S.period=p}catch(e){}
+
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money=n=>Math.round(+n||0).toLocaleString("ru-RU").replace(/ | /g," ");
+const sum=a=>a.reduce((s,x)=>s+(+x||0),0);
+const pct=(a,b)=>b?Math.round(a/b*100)+"%":"—";
+const dt=d=>d?new Date(d).toLocaleString("ru-RU",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}):"";
+const dd=d=>d?new Date(d+(String(d).length===10?"T00:00":"")).toLocaleDateString("ru-RU",{day:"2-digit",month:"2-digit",year:"2-digit"}):"—";
+const today=()=>new Date().toISOString().slice(0,10);
+const isAdmin=()=>me&&me.role==="admin";
+function toast(t){const el=$("toast");el.textContent=t;el.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>el.hidden=true,2400)}
+function show(id){["boot","setup","auth","wait","app"].forEach(x=>$(x).hidden=x!==id)}
+
+/* period range: [from, to) as Date */
+function range(){const n=new Date(),y=n.getFullYear(),m=n.getMonth();
+  if(S.period==="month")return[new Date(y,m,1),new Date(y,m+1,1)];
+  if(S.period==="prev")return[new Date(y,m-1,1),new Date(y,m,1)];
+  if(S.period==="d7")return[new Date(Date.now()-7*864e5),new Date(Date.now()+864e5)];
+  if(S.period==="d30")return[new Date(Date.now()-30*864e5),new Date(Date.now()+864e5)];
+  return[new Date(2000,0,1),new Date(2100,0,1)]}
+const inR=(d,[a,b])=>{if(!d)return false;const x=new Date(String(d).length===10?d+"T12:00":d);return x>=a&&x<b};
+const orderDate=o=>o.date||String(o.created_at).slice(0,10);
+
+/* ---------- boot ---------- */
+(async function boot(){
+  let cfg=null;try{cfg=await fetch("/api/config",{cache:"no-store"}).then(r=>r.ok?r.json():null)}catch(e){}
+  if(!cfg||!cfg.url||!cfg.anon||!window.supabase){show("setup");return}
+  sb=window.supabase.createClient(cfg.url,cfg.anon);
+  sb.auth.onAuthStateChange((ev)=>{if(ev==="SIGNED_OUT")location.reload()});
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session){show("auth");return}
+  await enter();
+})();
+
+async function enter(){
+  const {data:{user}}=await sb.auth.getUser();
+  if(!user){show("auth");return}
+  const {data}=await sb.from("profiles").select("*").eq("id",user.id).maybeSingle();
+  me=data||{role:"pending",email:user.email};
+  if(!["manager","admin"].includes(me.role)){show("wait");return}
+  $("uName").textContent=me.name||me.email;$("uRole").textContent=me.role==="admin"?"Админ":"Менеджер";
+  document.querySelectorAll("[data-admin]").forEach(b=>b.hidden=!isAdmin());
+  show("app");await load();render();
+}
+
+/* ---------- auth form ---------- */
+let mode="in";
+document.querySelector(".seg").addEventListener("click",e=>{const b=e.target.closest("[data-mode]");if(!b)return;mode=b.dataset.mode;
+  document.querySelectorAll(".seg button").forEach(x=>x.setAttribute("aria-pressed",x===b));$("nameRow").hidden=mode!=="up";$("aBtn").textContent=mode==="up"?"Зарегистрироваться":"Войти";$("aMsg").hidden=true});
+$("authForm").addEventListener("submit",async e=>{e.preventDefault();const em=$("aEmail").value.trim(),pw=$("aPass").value,nm=$("aName").value.trim(),m=$("aMsg");
+  const say=(t,err)=>{m.textContent=t;m.className="msg"+(err?" err":"");m.hidden=false};
+  if(!em||pw.length<6)return say("Введите почту и пароль не короче 6 символов.",true);
+  if(mode==="up"&&!nm)return say("Укажите имя: оно будет видно в заявках.",true);
+  $("aBtn").disabled=true;
+  const r=mode==="up"?await sb.auth.signUp({email:em,password:pw,options:{data:{name:nm}}}):await sb.auth.signInWithPassword({email:em,password:pw});
+  $("aBtn").disabled=false;
+  if(r.error)return say(r.error.message==="Invalid login credentials"?"Неверная почта или пароль.":r.error.message,true);
+  if(mode==="up"&&!r.data.session)return say("Проверьте почту и подтвердите регистрацию, затем войдите.");
+  await enter()});
+document.addEventListener("click",e=>{if(e.target.closest('[data-act="logout"]'))sb.auth.signOut()});
+
+/* ---------- data ---------- */
+async function load(){
+  const q=[sb.from("leads").select("*").order("created_at",{ascending:false}).limit(5000),
+    sb.from("orders").select("*").order("date",{ascending:false,nullsFirst:true}).limit(5000),
+    sb.from("order_cleaners").select("*"),sb.from("cleaners").select("*").order("name")];
+  if(isAdmin())q.push(sb.from("payouts").select("*"),sb.from("expenses").select("*").order("date",{ascending:false}),sb.from("profiles").select("*").order("created_at"));
+  const r=await Promise.all(q);const err=r.find(x=>x.error);if(err)toast("Ошибка загрузки: "+err.error.message);
+  [S.leads,S.orders,S.oc,S.cleaners]=r.slice(0,4).map(x=>x.data||[]);
+  if(isAdmin())[S.payouts,S.expenses,S.profiles]=r.slice(4).map(x=>x.data||[]);
+  const n=S.leads.filter(l=>l.status==="new").length;$("newCt").textContent=n;$("newCt").hidden=!n;
+}
+const cleanersOf=oid=>S.oc.filter(x=>x.order_id===oid).map(x=>S.cleaners.find(c=>c.id===x.cleaner_id)).filter(Boolean);
+const orderOfLead=lid=>S.orders.find(o=>o.lead_id===lid&&o.status!=="cancelled");
+
+/* ---------- router ---------- */
+$("tabs").addEventListener("click",e=>{const b=e.target.closest("[data-tab]");if(!b)return;S.tab=b.dataset.tab;S.q="";render();scrollTo(0,0)});
+function render(){document.querySelectorAll("#tabs [data-tab]").forEach(b=>b.setAttribute("aria-current",b.dataset.tab===S.tab?"page":"false"));
+  ({dash:vDash,leads:vLeads,orders:vOrders,cleaners:vCleaners,money:vMoney,team:vTeam}[S.tab]||vDash)()}
+const periodSel=()=>`<select class="period" id="period" aria-label="Период">${Object.entries(PERIODS).map(([k,v])=>`<option value="${k}" ${S.period===k?"selected":""}>${v}</option>`).join("")}</select>`;
+document.addEventListener("change",e=>{if(e.target.id==="period"){S.period=e.target.value;try{localStorage.setItem("oqcrm_period",S.period)}catch(x){}render()}});
+
+/* ---------- dashboard ---------- */
+function vDash(){const R=range(),A=isAdmin();
+  const leads=S.leads.filter(l=>inR(l.created_at,R));
+  const ordersP=S.orders.filter(o=>o.status!=="cancelled"&&inR(orderDate(o),R));
+  const done=ordersP.filter(o=>o.status==="done");
+  const revenue=sum(done.map(o=>o.price));
+  const leadIdsWithOrder=new Set(S.orders.filter(o=>o.status!=="cancelled"&&o.lead_id).map(o=>o.lead_id));
+  const conv=leads.filter(l=>leadIdsWithOrder.has(l.id)||["booked","done"].includes(l.status)).length;
+  const reached=leads.filter(l=>!["new","ndz"].includes(l.status)||leadIdsWithOrder.has(l.id)).length;
+  const doneLeads=leads.filter(l=>l.status==="done"||S.orders.some(o=>o.lead_id===l.id&&o.status==="done")).length;
+  const paidLeads=leads.filter(l=>S.orders.some(o=>o.lead_id===l.id&&o.paid)).length;
+  const doneIds=new Set(done.map(o=>o.id));
+  const pay=sum(S.payouts.filter(p=>doneIds.has(p.order_id)).map(p=>p.amount));
+  const exp=sum(S.expenses.filter(x=>inR(x.date,R)).map(x=>x.amount));
+  const profit=revenue-pay-exp;
+  const unpaidOrders=S.orders.filter(o=>o.status==="done"&&!o.paid);
+  const k=(t,v,s,c="")=>`<div class="card kpi ${c}"><span>${t}</span><b class="num">${v}</b>${s?`<small>${s}</small>`:""}</div>`;
+  const bars=(rows,fmt=x=>x)=>{const mx=Math.max(1,...rows.map(r=>r[1]));return rows.length?`<div class="bars">${rows.map(([n,v,s])=>`<div class="brow"><span>${esc(n)}</span><div class="t"><i style="width:${Math.max(2,v/mx*100)}%"></i></div><b>${fmt(v)}${s?` <small class="muted">${s}</small>`:""}</b></div>`).join("")}</div>`:`<p class="muted">Нет данных за период</p>`};
+  const fun=[["Лиды",leads.length],["Связались",reached],["Записаны",conv],["Убрано",doneLeads],["Оплачено",paidLeads]];
+  const src={};leads.forEach(l=>src[l.source]=(src[l.source]||0)+1);
+  const srcConv={};leads.forEach(l=>{if(leadIdsWithOrder.has(l.id))srcConv[l.source]=(srcConv[l.source]||0)+1});
+  const svc={};done.forEach(o=>svc[o.service||"other"]=(svc[o.service||"other"]||0)+(+o.price||0));
+  const lost={};leads.filter(l=>l.status==="lost").forEach(l=>{const r=l.lost_reason||"без причины";lost[r]=(lost[r]||0)+1});
+  const byCl=S.cleaners.map(c=>{const os=done.filter(o=>S.oc.some(x=>x.order_id===o.id&&x.cleaner_id===c.id));
+    const ps=S.payouts.filter(p=>p.cleaner_id===c.id&&doneIds.has(p.order_id));
+    return{c,n:os.length,rev:sum(os.map(o=>(+o.price||0)/Math.max(1,S.oc.filter(x=>x.order_id===o.id).length))),pay:sum(ps.map(p=>p.amount)),due:sum(S.payouts.filter(p=>p.cleaner_id===c.id&&!p.paid).map(p=>p.amount))}}).filter(x=>x.n||x.due).sort((a,b)=>b.n-a.n);
+  const expCat={};S.expenses.filter(x=>inR(x.date,R)).forEach(x=>expCat[x.category]=(expCat[x.category]||0)+(+x.amount||0));
+  $("view").innerHTML=`
+  <div class="bar"><h2>Дашборд</h2><div class="l">${periodSel()}</div></div>
+  <div class="kpis">
+    ${k("Лиды",leads.length,`новых сейчас: ${S.leads.filter(l=>l.status==="new").length}`)}
+    ${k("Конверсия в заказ",pct(conv,leads.length),`${conv} из ${leads.length}`)}
+    ${k("Уборок выполнено",done.length,`запланировано: ${ordersP.filter(o=>o.status==="scheduled").length}`)}
+    ${k("Выручка, сум",money(revenue),`средний чек ${money(done.length?revenue/done.length:0)}`)}
+    ${A?k("Выплаты клинерам",money(pay),`к выплате всего: ${money(sum(S.payouts.filter(p=>!p.paid).map(p=>p.amount)))}`):""}
+    ${A?k("Расходы",money(exp),`по категориям ниже`):""}
+    ${A?k("Прибыль",money(profit),`маржа ${pct(profit,revenue)}`,profit>=0?"pos":"neg"):""}
+    ${k("Не оплачено клиентами",money(sum(unpaidOrders.map(o=>o.price))),`${unpaidOrders.length} заказ(ов)`,unpaidOrders.length?"neg":"")}
+  </div>
+  <div class="panels">
+    <section class="card panel funnel"><h3>Воронка лидов</h3><div class="bars">${fun.map(([n,v],i)=>`<div class="brow"><span>${n}</span><div class="t"><i style="width:${leads.length?Math.max(2,v/leads.length*100):0}%"></i></div><b>${v} <small>${i?pct(v,leads.length):""}</small></b></div>`).join("")}</div></section>
+    <section class="card panel"><h3>Источники лидов</h3>${bars(Object.entries(src).sort((a,b)=>b[1]-a[1]).map(([s,v])=>[SRC[s]||s,v,`→ ${pct(srcConv[s]||0,v)}`]))}</section>
+    <section class="card panel"><h3>Выручка по услугам, сум</h3>${bars(Object.entries(svc).sort((a,b)=>b[1]-a[1]).map(([s,v])=>[SVC[s]||"Другое",v]),money)}</section>
+    <section class="card panel"><h3>Причины отказов</h3>${bars(Object.entries(lost).sort((a,b)=>b[1]-a[1]))}</section>
+    <section class="card panel" style="grid-column:1/-1"><h3>Клинеры за период</h3>${byCl.length?`<div class="scroll"><table class="tbl"><thead><tr><th>Клинер</th><th class="r">Уборок</th><th class="r">Выручка объектов</th>${A?`<th class="r">Выплаты</th><th class="r">Долг по выплатам</th>`:""}</tr></thead><tbody>${byCl.map(x=>`<tr><td>${esc(x.c.name)}</td><td class="r">${x.n}</td><td class="r">${money(x.rev)}</td>${A?`<td class="r">${money(x.pay)}</td><td class="r">${money(x.due)}</td>`:""}</tr>`).join("")}</tbody></table></div>`:`<p class="muted">Нет выполненных уборок за период</p>`}</section>
+    ${A?`<section class="card panel" style="grid-column:1/-1"><h3>Расходы по категориям, сум</h3>${bars(Object.entries(expCat).sort((a,b)=>b[1]-a[1]).map(([c,v])=>[EXP[c]||c,v]),money)}</section>`:""}
+  </div>`}
+
+/* ---------- leads ---------- */
+function vLeads(){const f=S.leadFilter,q=S.q.toLowerCase();
+  const cnt=s=>S.leads.filter(l=>l.status===s).length;
+  let rows=S.leads.filter(l=>f==="all"||l.status===f);
+  if(q)rows=rows.filter(l=>[l.name,l.phone,l.district,l.ref].join(" ").toLowerCase().includes(q));
+  $("view").innerHTML=`
+  <div class="bar"><h2>Лиды</h2><div class="l"><input class="search" id="q" placeholder="Поиск: имя, телефон, район" value="${esc(S.q)}"><button class="btn" type="button" data-act="newLead">+ Лид</button></div></div>
+  <div class="chips" style="margin-bottom:14px"><button class="chip" data-lf="all" aria-pressed="${f==="all"}">Все<em>${S.leads.length}</em></button>${LS_ORDER.map(s=>`<button class="chip" data-lf="${s}" aria-pressed="${f===s}">${LS[s]}<em>${cnt(s)}</em></button>`).join("")}</div>
+  <div class="card scroll">${rows.length?`<table class="tbl cards"><thead><tr><th>Дата</th><th>Клиент</th><th>Услуга</th><th class="r">Смета</th><th>Источник</th><th>Статус</th><th>Ведёт</th></tr></thead><tbody>${rows.map(l=>`<tr class="click" data-lead="${l.id}"><td class="muted hide-m">${dt(l.created_at)}</td><td><b>${esc(l.name)}</b><br><span class="muted">${esc(l.phone)}${l.district?" · "+esc(l.district):""}</span></td><td class="hide-m">${esc(SVC[l.service]||"—")}${l.rooms?` · ${l.rooms}-комн.`:""}</td><td class="r hide-m">${l.quote?money(l.quote):"—"}</td><td class="hide-m">${esc(SRC[l.source]||l.source)}</td><td><span class="pill ${l.status}">${LS[l.status]}</span></td><td class="muted hide-m">${esc(l.owner||"—")}</td></tr>`).join("")}</tbody></table>`:`<p class="empty">Лидов нет. Заявки с сайта появятся здесь автоматически, а лиды из Instagram и звонков можно добавить кнопкой «+ Лид».</p>`}</div>`}
+document.addEventListener("input",e=>{if(e.target.id==="q"){S.q=e.target.value;const p=e.target.selectionStart;render();const i=$("q");i.focus();i.setSelectionRange(p,p)}});
+
+async function sync(leadId,body){
+  try{const {data:{session}}=await sb.auth.getSession();
+    const r=await fetch("/api/sync",{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+session.access_token},body:JSON.stringify({lead_id:leadId,...body})});
+    if(r.ok)return true}catch(e){}
+  return false}
+
+function openLead(id){const l=S.leads.find(x=>x.id===id);if(!l)return;
+  drawer(`${esc(l.name)}`,`<div class="db-in" id="leadBox">Загрузка…</div>`);
+  sb.from("lead_events").select("*").eq("lead_id",id).order("created_at").then(({data})=>{const ev=data||[],o=orderOfLead(id);
+  $("leadBox").innerHTML=`
+    <section style="display:grid;gap:10px"><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span class="pill ${l.status}">${LS[l.status]}</span>${l.owner?`<span class="muted">ведёт ${esc(l.owner)}</span>`:""}${l.lost_reason?`<span class="muted">· ${esc(l.lost_reason)}</span>`:""}</div>
+    <div class="sbtns">${["contacted","ndz","booked","done","later","lost"].map(s=>`<button type="button" data-ls="${s}" aria-pressed="${l.status===s}">${LS[s]}</button>`).join("")}</div>
+    <div id="lostBox" hidden style="display:grid;gap:8px;grid-template-columns:1fr auto"><input id="lostWhy" placeholder="Причина: дорого, нашли других, не актуально…"><button class="btn" type="button" data-act="lostOk">Сохранить</button></div></section>
+    <dl class="kv"><dt>Телефон</dt><dd>${esc(l.phone)}</dd><dt>Услуга</dt><dd>${esc(SVC[l.service]||"—")}${l.rooms?` · ${l.rooms}-комн.`:""}${l.baths>1?` · санузлов ${l.baths}`:""}</dd>
+    ${(l.options||[]).length?`<dt>Доп.</dt><dd>${esc(l.options.join(", "))}</dd>`:""}<dt>Смета</dt><dd>${l.quote?money(l.quote)+" сум":"—"}</dd>
+    <dt>Район</dt><dd>${esc([l.district,l.address].filter(Boolean).join(", ")||"—")}</dd><dt>Когда</dt><dd>${esc(l.when_text||"—")}</dd>
+    <dt>Источник</dt><dd>${esc(SRC[l.source]||l.source)} · ${dt(l.created_at)}${l.ref?" · #"+esc(l.ref):""}</dd>
+    <dt>Заказ</dt><dd>${o?`<a href="#" data-order="${o.id}">№${o.id} · ${OS[o.status]} · ${money(o.price)} сум</a>`:`<button class="btn small" type="button" data-act="toOrder">Создать заказ</button>`}</dd></dl>
+    <section style="display:grid;gap:8px"><h3>Комментарий</h3><textarea id="cmt" placeholder="Что сказал клиент, договорённости…"></textarea><div><button class="btn" type="button" data-act="cmt">Добавить</button></div></section>
+    <section style="display:grid;gap:8px"><h3>История</h3>${ev.length?`<ol class="tl">${[...ev].reverse().map(e=>`<li><span>${e.kind==="status"?LS[e.status]||e.status:esc(e.text)}</span><small>${esc(e.actor||"—")} · ${dt(e.created_at)}</small></li>`).join("")}</ol>`:`<p class="muted">Пока пусто</p>`}</section>
+    <details><summary class="muted" style="cursor:pointer">Изменить данные лида</summary><form id="leadEdit" style="display:grid;gap:10px;margin-top:10px">${leadFields(l)}<button class="btn" type="submit">Сохранить</button></form></details>`;
+  const bx=$("leadBox");
+  bx.onclick=async e=>{const b=e.target.closest("[data-ls]");
+    if(b){const s=b.dataset.ls;if(s==="lost"){$("lostBox").hidden=false;$("lostWhy").focus();return}await setStatus(l,s);return}
+    if(e.target.closest('[data-act="lostOk"]'))await setStatus(l,"lost",$("lostWhy").value.trim());
+    if(e.target.closest('[data-act="cmt"]')){const t=$("cmt").value.trim();if(!t)return;
+      if(!(await sync(l.id,{comment:t}))){const r=await sb.from("lead_events").insert({lead_id:l.id,actor:me.name||me.email,kind:"comment",text:t});if(r.error)return toast(r.error.message)}
+      toast("Комментарий добавлен");openLead(l.id)}
+    if(e.target.closest('[data-act="toOrder"]'))openOrder(null,l);
+    const oa=e.target.closest("[data-order]");if(oa){e.preventDefault();openOrder(+oa.dataset.order)}};
+  $("leadEdit").onsubmit=async e=>{e.preventDefault();const v=readLead();const r=await sb.from("leads").update(v).eq("id",l.id);if(r.error)return toast(r.error.message);toast("Сохранено");await load();openLead(l.id);render()};
+  })}
+async function setStatus(l,s,reason){
+  const ok=await sync(l.id,{status:s,reason});
+  if(!ok){const patch={status:s,updated_at:new Date().toISOString()};if(!l.owner)patch.owner=me.name||me.email;if(s==="lost"&&reason)patch.lost_reason=reason;
+    const r=await sb.from("leads").update(patch).eq("id",l.id);if(r.error)return toast(r.error.message);
+    await sb.from("lead_events").insert({lead_id:l.id,actor:me.name||me.email,kind:"status",status:s})}
+  toast(LS[s]+(ok?" · Telegram обновлён":""));await load();render();openLead(l.id)}
+function leadFields(l={}){return`<div class="grid2"><label class="f">Имя<input name="name" value="${esc(l.name)}" required></label><label class="f">Телефон<input name="phone" value="${esc(l.phone)}" required inputmode="tel"></label></div>
+  <div class="grid2"><label class="f">Источник<select name="source">${Object.entries(SRC).map(([k,v])=>`<option value="${k}" ${l.source===k?"selected":""}>${v}</option>`).join("")}</select></label><label class="f">Услуга<select name="service"><option value="">—</option>${Object.entries(SVC).map(([k,v])=>`<option value="${k}" ${l.service===k?"selected":""}>${v}</option>`).join("")}</select></label></div>
+  <div class="grid3"><label class="f">Комнат<input name="rooms" type="number" min="0" value="${esc(l.rooms??"")}"></label><label class="f">Санузлов<input name="baths" type="number" min="0" value="${esc(l.baths??"")}"></label><label class="f">Смета, сум<input name="quote" type="number" min="0" value="${esc(l.quote??"")}"></label></div>
+  <div class="grid2"><label class="f">Район<input name="district" value="${esc(l.district)}"></label><label class="f">Когда удобно<input name="when_text" value="${esc(l.when_text)}"></label></div>
+  <label class="f">Адрес<input name="address" value="${esc(l.address)}"></label>`}
+function readLead(){const f=document.querySelector("#leadEdit, #leadNew"),g=n=>f.elements[n].value.trim(),num=n=>g(n)===""?null:+g(n);
+  return{name:g("name"),phone:g("phone"),source:g("source"),service:g("service")||null,rooms:num("rooms"),baths:num("baths"),quote:num("quote"),district:g("district")||null,when_text:g("when_text")||null,address:g("address")||null}}
+function newLead(){drawer("Новый лид",`<form id="leadNew" style="display:grid;gap:10px">${leadFields({source:"instagram"})}<button class="btn" type="submit">Добавить лид</button></form>`);
+  $("leadNew").onsubmit=async e=>{e.preventDefault();const v=readLead();if(!v.name||!v.phone)return toast("Укажите имя и телефон");
+    const r=await sb.from("leads").insert({...v,owner:me.name||me.email}).select().single();if(r.error)return toast(r.error.message);
+    await sb.from("lead_events").insert({lead_id:r.data.id,actor:me.name||me.email,kind:"system",text:"Лид добавлен вручную"});
+    toast("Лид добавлен");await load();render();openLead(r.data.id)}}
+
+/* ---------- orders ---------- */
+function vOrders(){const f=S.orderFilter,q=S.q.toLowerCase(),t=today();
+  let rows=S.orders.filter(o=>f==="all"||(f==="upcoming"&&o.status==="scheduled")||(f==="done"&&o.status==="done")||(f==="unpaid"&&o.status==="done"&&!o.paid)||(f==="cancelled"&&o.status==="cancelled"));
+  if(f==="upcoming")rows=[...rows].sort((a,b)=>String(a.date||"9").localeCompare(String(b.date||"9")));
+  if(q)rows=rows.filter(o=>[o.client_name,o.phone,o.district,o.address].join(" ").toLowerCase().includes(q));
+  const fl=[["upcoming","Предстоящие"],["done","Выполнены"],["unpaid","Не оплачены"],["cancelled","Отменены"],["all","Все"]];
+  $("view").innerHTML=`
+  <div class="bar"><h2>Заказы</h2><div class="l"><input class="search" id="q" placeholder="Поиск: клиент, телефон, адрес" value="${esc(S.q)}"><button class="btn" type="button" data-act="newOrder">+ Заказ</button></div></div>
+  <div class="chips" style="margin-bottom:14px">${fl.map(([k,v])=>`<button class="chip" data-of="${k}" aria-pressed="${f===k}">${v}</button>`).join("")}</div>
+  <div class="card scroll">${rows.length?`<table class="tbl cards"><thead><tr><th>Дата</th><th>Клиент</th><th>Услуга</th><th>Клинеры</th><th class="r">Сумма</th><th>Статус</th><th>Оплата</th></tr></thead><tbody>${rows.map(o=>`<tr class="click" data-order="${o.id}"><td class="${o.date&&o.date<t&&o.status==="scheduled"?"":"muted"}">${dd(o.date)}${o.time_text?"<br><span class=muted>"+esc(o.time_text)+"</span>":""}</td><td><b>${esc(o.client_name||"—")}</b><br><span class="muted">${esc(o.district||o.address||o.phone||"")}</span></td><td class="hide-m">${esc(SVC[o.service]||"—")}${o.rooms?` · ${o.rooms}-комн.`:""}</td><td class="hide-m">${esc(cleanersOf(o.id).map(c=>c.name).join(", ")||"—")}</td><td class="r">${money(o.price)}</td><td><span class="pill ${o.status}">${OS[o.status]}</span></td><td class="hide-m">${o.status==="done"?`<span class="pill ${o.paid?"paid":"unpaid"}">${o.paid?"Оплачен":"Ждём оплату"}</span>`:""}</td></tr>`).join("")}</tbody></table>`:`<p class="empty">Здесь пусто. Заказ создаётся из лида кнопкой «Записан» (в CRM или в Telegram) или вручную.</p>`}</div>`}
+
+function openOrder(id,fromLead){const o=id?S.orders.find(x=>x.id===id):{status:"scheduled",price:fromLead?.quote||0,client_name:fromLead?.name,phone:fromLead?.phone,district:fromLead?.district,address:fromLead?.address,service:fromLead?.service,rooms:fromLead?.rooms,lead_id:fromLead?.id||null,notes:fromLead?.when_text?`Когда: ${fromLead.when_text}`:""};
+  if(!o)return;const sel=new Set(id?S.oc.filter(x=>x.order_id===id).map(x=>x.cleaner_id):[]);const A=isAdmin();
+  const pays=id?S.payouts.filter(p=>p.order_id===id):[];
+  const actv=S.cleaners.filter(c=>c.active||sel.has(c.id));
+  drawer(id?`Заказ №${id}`:"Новый заказ",`<form id="orderForm" style="display:grid;gap:12px">
+    ${o.lead_id?`<p class="muted" style="margin:0">Из лида: <a href="#" data-lead-link="${o.lead_id}">${esc(S.leads.find(l=>l.id===o.lead_id)?.name||"№"+o.lead_id)}</a></p>`:""}
+    <div class="grid3"><label class="f">Дата<input type="date" name="date" value="${esc(o.date||"")}"></label><label class="f">Время<input name="time_text" placeholder="10:00" value="${esc(o.time_text)}"></label><label class="f">Статус<select name="status">${Object.entries(OS).map(([k,v])=>`<option value="${k}" ${o.status===k?"selected":""}>${v}</option>`).join("")}</select></label></div>
+    <div class="grid2"><label class="f">Клиент<input name="client_name" value="${esc(o.client_name)}"></label><label class="f">Телефон<input name="phone" value="${esc(o.phone)}"></label></div>
+    <div class="grid2"><label class="f">Район<input name="district" value="${esc(o.district)}"></label><label class="f">Адрес<input name="address" value="${esc(o.address)}"></label></div>
+    <div class="grid3"><label class="f">Услуга<select name="service"><option value="">—</option>${Object.entries(SVC).map(([k,v])=>`<option value="${k}" ${o.service===k?"selected":""}>${v}</option>`).join("")}</select></label><label class="f">Комнат<input type="number" min="0" name="rooms" value="${esc(o.rooms??"")}"></label><label class="f">Площадь, м²<input type="number" min="0" name="area_m2" value="${esc(o.area_m2??"")}"></label></div>
+    <div class="grid3"><label class="f">Сумма, сум<input type="number" min="0" name="price" value="${esc(o.price??0)}"></label><label class="f">Оплата<select name="paid"><option value="0" ${!o.paid?"selected":""}>Не оплачен</option><option value="1" ${o.paid?"selected":""}>Оплачен</option></select></label><label class="f">Способ<select name="pay_method"><option value="">—</option>${["Наличные","Payme","Click","Перевод на карту","Перечисление"].map(v=>`<option ${o.pay_method===v?"selected":""}>${v}</option>`).join("")}</select></label></div>
+    <div style="display:grid;gap:6px"><span class="f" style="font-size:12px;font-weight:700;color:var(--muted)">Клинеры на объекте</span>${actv.length?`<div class="cbox" id="clBox">${actv.map(c=>`<label><input type="checkbox" value="${c.id}" ${sel.has(c.id)?"checked":""}>${esc(c.name)}</label>`).join("")}</div>`:`<p class="muted" style="margin:0">Сначала добавьте клинеров во вкладке «Клинеры».</p>`}</div>
+    ${A?`<div style="display:grid;gap:8px" id="payBox"></div>`:""}
+    <label class="f">Заметки<textarea name="notes">${esc(o.notes)}</textarea></label>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" type="submit">Сохранить</button>${id&&A?`<button class="btn danger" type="button" data-act="delOrder">Удалить</button>`:""}</div></form>`);
+  const payDraft={};pays.forEach(p=>payDraft[p.cleaner_id]={amount:p.amount,paid:p.paid});
+  function drawPay(){if(!A)return;const ids=[...document.querySelectorAll("#clBox input:checked")].map(i=>+i.value);
+    $("payBox").innerHTML=ids.length?`<span style="font-size:12px;font-weight:700;color:var(--muted)">Выплаты клинерам, сум</span>${ids.map(cid=>{const c=S.cleaners.find(x=>x.id===cid),p=payDraft[cid]||{amount:"",paid:false};return`<div class="payrow"><span>${esc(c?.name)}</span><input type="number" min="0" data-pay="${cid}" value="${esc(p.amount)}" placeholder="0"><label><input type="checkbox" data-paid="${cid}" ${p.paid?"checked":""}>выплачено</label></div>`}).join("")}`:""}
+  drawPay();
+  const form=$("orderForm");
+  form.addEventListener("change",e=>{if(e.target.closest("#clBox"))drawPay()});
+  form.addEventListener("input",e=>{const a=e.target.dataset.pay;if(a){payDraft[a]={...(payDraft[a]||{}),amount:e.target.value}}});
+  form.addEventListener("change",e=>{const a=e.target.dataset.paid;if(a){payDraft[a]={...(payDraft[a]||{}),paid:e.target.checked}}});
+  form.addEventListener("click",async e=>{const ll=e.target.closest("[data-lead-link]");if(ll){e.preventDefault();openLead(+ll.dataset.leadLink)}
+    if(e.target.closest('[data-act="delOrder"]')){if(e.target.dataset.sure!=="1"){e.target.dataset.sure="1";e.target.textContent="Точно удалить?";return}
+      const r=await sb.from("orders").delete().eq("id",id);if(r.error)return toast(r.error.message);toast("Заказ удалён");closeDrawer();await load();render()}});
+  form.onsubmit=async e=>{e.preventDefault();const g=n=>form.elements[n].value.trim(),num=n=>g(n)===""?null:+g(n);
+    const v={date:g("date")||null,time_text:g("time_text")||null,status:g("status"),client_name:g("client_name")||null,phone:g("phone")||null,district:g("district")||null,address:g("address")||null,service:g("service")||null,rooms:num("rooms"),area_m2:num("area_m2"),price:num("price")||0,paid:g("paid")==="1",pay_method:g("pay_method")||null,notes:g("notes")||null,lead_id:o.lead_id||null};
+    if(v.paid&&!o.paid)v.paid_at=today();
+    const r=id?await sb.from("orders").update(v).eq("id",id).select().single():await sb.from("orders").insert(v).select().single();
+    if(r.error)return toast(r.error.message);const oid=r.data.id;
+    const ids=[...document.querySelectorAll("#clBox input:checked")].map(i=>+i.value);
+    await sb.from("order_cleaners").delete().eq("order_id",oid);
+    if(ids.length){const x=await sb.from("order_cleaners").insert(ids.map(c=>({order_id:oid,cleaner_id:c})));if(x.error)toast(x.error.message)}
+    if(A){await sb.from("payouts").delete().eq("order_id",oid).not("cleaner_id","in",`(${ids.join(",")||0})`);
+      const rows=ids.map(c=>({order_id:oid,cleaner_id:c,amount:+(payDraft[c]?.amount||0),paid:!!payDraft[c]?.paid,paid_at:payDraft[c]?.paid?today():null}));
+      if(rows.length){const x=await sb.from("payouts").upsert(rows,{onConflict:"order_id,cleaner_id"});if(x.error)toast(x.error.message)}}
+    if(o.lead_id){const l=S.leads.find(x=>x.id===o.lead_id);
+      if(l&&v.status==="done"&&l.status!=="done")await sync(l.id,{status:"done"})||await sb.from("leads").update({status:"done"}).eq("id",l.id);
+      else if(l&&!id&&!["booked","done"].includes(l.status))await sync(l.id,{status:"booked"})||await sb.from("leads").update({status:"booked"}).eq("id",l.id)}
+    toast("Заказ сохранён");closeDrawer();await load();render()};
+}
+
+/* ---------- cleaners ---------- */
+function vCleaners(){const R=range(),A=isAdmin();
+  const done=S.orders.filter(o=>o.status==="done"&&inR(orderDate(o),R));
+  $("view").innerHTML=`
+  <div class="bar"><h2>Клинеры</h2><div class="l">${periodSel()}<button class="btn" type="button" data-act="newCleaner">+ Клинер</button></div></div>
+  <div class="card scroll">${S.cleaners.length?`<table class="tbl cards"><thead><tr><th>Имя</th><th>Телефон</th><th class="r">Уборок за период</th>${A?`<th class="r">Выплаты за период</th><th class="r">Долг по выплатам</th>`:""}<th>Статус</th></tr></thead><tbody>${S.cleaners.map(c=>{const os=done.filter(o=>S.oc.some(x=>x.order_id===o.id&&x.cleaner_id===c.id)),ids=new Set(os.map(o=>o.id));
+    return`<tr class="click" data-cleaner="${c.id}"><td><b>${esc(c.name)}</b></td><td class="muted">${esc(c.phone||"—")}</td><td class="r">${os.length}</td>${A?`<td class="r hide-m">${money(sum(S.payouts.filter(p=>p.cleaner_id===c.id&&ids.has(p.order_id)).map(p=>p.amount)))}</td><td class="r hide-m">${money(sum(S.payouts.filter(p=>p.cleaner_id===c.id&&!p.paid).map(p=>p.amount)))}</td>`:""}<td class="hide-m"><span class="pill ${c.active?"done":""}">${c.active?"Работает":"Не работает"}</span></td></tr>`}).join("")}</tbody></table>`:`<p class="empty">Добавьте клинеров, чтобы назначать их на заказы и считать выплаты.</p>`}</div>`}
+function openCleaner(id){const c=id?S.cleaners.find(x=>x.id===id):{active:true};
+  const hist=id?S.orders.filter(o=>S.oc.some(x=>x.order_id===o.id&&x.cleaner_id===id)).slice(0,30):[];
+  drawer(id?esc(c.name):"Новый клинер",`<form id="clForm" style="display:grid;gap:10px">
+    <div class="grid2"><label class="f">Имя<input name="name" value="${esc(c.name)}" required></label><label class="f">Телефон<input name="phone" value="${esc(c.phone)}"></label></div>
+    <label class="f">Статус<select name="active"><option value="1" ${c.active?"selected":""}>Работает</option><option value="0" ${!c.active?"selected":""}>Не работает</option></select></label>
+    <label class="f">Заметки<textarea name="notes" placeholder="Документы, навыки, график…">${esc(c.notes)}</textarea></label>
+    <div><button class="btn" type="submit">Сохранить</button></div></form>
+    ${hist.length?`<section style="display:grid;gap:8px"><h3>Последние уборки</h3><ol class="tl">${hist.map(o=>{const p=S.payouts.find(x=>x.order_id===o.id&&x.cleaner_id===id);return`<li><span>${dd(o.date)} · ${esc(o.client_name||"—")} · ${esc(SVC[o.service]||"")}</span><small>${OS[o.status]}${isAdmin()&&p?` · выплата ${money(p.amount)} ${p.paid?"✓":"(не выплачено)"}`:""}</small></li>`}).join("")}</ol></section>`:""}`);
+  $("clForm").onsubmit=async e=>{e.preventDefault();const f=e.target,v={name:f.name.value.trim(),phone:f.phone.value.trim()||null,active:f.active.value==="1",notes:f.notes.value.trim()||null};
+    if(!v.name)return toast("Укажите имя");const r=id?await sb.from("cleaners").update(v).eq("id",id):await sb.from("cleaners").insert(v);
+    if(r.error)return toast(r.error.message);toast("Сохранено");closeDrawer();await load();render()}}
+
+/* ---------- money (admin) ---------- */
+function vMoney(){if(!isAdmin())return vDash();const R=range();
+  const ex=S.expenses.filter(x=>inR(x.date,R));const due=S.payouts.filter(p=>!p.paid);
+  $("view").innerHTML=`
+  <div class="bar"><h2>Расходы и выплаты</h2><div class="l">${periodSel()}</div></div>
+  <div class="panels">
+  <section class="card panel"><h3>Добавить расход</h3><form id="expForm" style="display:grid;gap:10px">
+    <div class="grid2"><label class="f">Дата<input type="date" name="date" value="${today()}"></label><label class="f">Сумма, сум<input type="number" min="0" name="amount" required placeholder="0"></label></div>
+    <label class="f">Категория<select name="category">${Object.entries(EXP).map(([k,v])=>`<option value="${k}">${v}</option>`).join("")}</select></label>
+    <label class="f">Комментарий<input name="note" placeholder="Например: таргет Instagram, химия Karcher"></label>
+    <div><button class="btn" type="submit">Добавить</button></div></form></section>
+  <section class="card panel"><h3>Долг по выплатам клинерам</h3>${due.length?`<div class="scroll"><table class="tbl"><thead><tr><th>Клинер</th><th>Заказ</th><th class="r">Сумма</th><th></th></tr></thead><tbody>${due.map(p=>{const o=S.orders.find(x=>x.id===p.order_id),c=S.cleaners.find(x=>x.id===p.cleaner_id);return`<tr><td>${esc(c?.name||"—")}</td><td class="muted">${dd(o?.date)} · ${esc(o?.client_name||"")}</td><td class="r">${money(p.amount)}</td><td class="r"><button class="btn small" type="button" data-payout="${p.id}">Выплачено</button></td></tr>`}).join("")}</tbody></table></div><p class="muted" style="margin:0">Итого: <b class="num">${money(sum(due.map(p=>p.amount)))}</b> сум</p>`:`<p class="muted">Все выплаты закрыты.</p>`}</section>
+  <section class="card panel" style="grid-column:1/-1"><h3>Расходы за период · ${money(sum(ex.map(x=>x.amount)))} сум</h3>${ex.length?`<div class="scroll"><table class="tbl cards"><thead><tr><th>Дата</th><th>Категория</th><th>Комментарий</th><th class="r">Сумма</th><th></th></tr></thead><tbody>${ex.map(x=>`<tr><td class="muted">${dd(x.date)}</td><td>${esc(EXP[x.category]||x.category)}</td><td class="muted hide-m">${esc(x.note||"")}</td><td class="r">${money(x.amount)}</td><td class="r"><button class="btn small danger" type="button" data-delexp="${x.id}">Удалить</button></td></tr>`).join("")}</tbody></table></div>`:`<p class="muted">Расходов за период нет.</p>`}</section></div>`;
+  $("expForm").onsubmit=async e=>{e.preventDefault();const f=e.target,v={date:f.date.value||today(),amount:+f.amount.value,category:f.category.value,note:f.note.value.trim()||null,created_by:me.name||me.email};
+    if(!v.amount)return toast("Укажите сумму");const r=await sb.from("expenses").insert(v);if(r.error)return toast(r.error.message);toast("Расход добавлен");await load();render()}}
+
+/* ---------- team (admin) ---------- */
+function vTeam(){if(!isAdmin())return vDash();
+  const RL={pending:"Ждёт одобрения",manager:"Менеджер",admin:"Админ",blocked:"Заблокирован"};
+  $("view").innerHTML=`
+  <div class="bar"><h2>Команда</h2></div>
+  <p class="muted" style="margin:-6px 0 14px">Новые сотрудники регистрируются на этой странице сами, затем вы выдаёте им роль. Менеджер ведёт лиды, заказы и клинеров. Админ видит ещё выплаты, расходы и прибыль.</p>
+  <div class="card scroll"><table class="tbl cards"><thead><tr><th>Имя</th><th>Почта</th><th>Роль</th></tr></thead><tbody>${S.profiles.map(p=>`<tr><td><b>${esc(p.name||"—")}</b></td><td class="muted">${esc(p.email)}</td><td><select data-role="${p.id}" ${p.id===me.id?"disabled":""} style="width:auto">${Object.entries(RL).map(([k,v])=>`<option value="${k}" ${p.role===k?"selected":""}>${v}</option>`).join("")}</select></td></tr>`).join("")}</tbody></table></div>`}
+
+/* ---------- drawer + global clicks ---------- */
+function drawer(title,html){$("dTitle").innerHTML=title;$("dBody").innerHTML=html;$("drawer").hidden=false;$("scrim").hidden=false;document.body.style.overflow="hidden";const f=$("dBody").querySelector("input,select,textarea,button");}
+function closeDrawer(){$("drawer").hidden=true;$("scrim").hidden=true;document.body.style.overflow=""}
+$("scrim").onclick=closeDrawer;
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("drawer").hidden)closeDrawer()});
+$("app").addEventListener("click",async e=>{const t=e.target;
+  const lf=t.closest("[data-lf]");if(lf){S.leadFilter=lf.dataset.lf;return render()}
+  const of=t.closest("[data-of]");if(of){S.orderFilter=of.dataset.of;return render()}
+  const lr=t.closest("tr[data-lead]");if(lr)return openLead(+lr.dataset.lead);
+  const or=t.closest("tr[data-order]");if(or)return openOrder(+or.dataset.order);
+  const cr=t.closest("tr[data-cleaner]");if(cr)return openCleaner(+cr.dataset.cleaner);
+  const act=t.closest("[data-act]")?.dataset.act;
+  if(act==="newLead")return newLead();if(act==="newOrder")return openOrder(null);if(act==="newCleaner")return openCleaner(null);
+  const po=t.closest("[data-payout]");if(po){const r=await sb.from("payouts").update({paid:true,paid_at:today()}).eq("id",+po.dataset.payout);if(r.error)return toast(r.error.message);toast("Отмечено как выплачено");await load();render()}
+  const de=t.closest("[data-delexp]");if(de){if(de.dataset.sure!=="1"){de.dataset.sure="1";de.textContent="Точно?";return}const r=await sb.from("expenses").delete().eq("id",+de.dataset.delexp);if(r.error)return toast(r.error.message);await load();render()}
+});
+document.addEventListener("click",e=>{if(e.target.closest('#drawer [data-act="close"]'))closeDrawer()});
+$("app").addEventListener("change",async e=>{const r=e.target.dataset.role;if(!r)return;const x=await sb.from("profiles").update({role:e.target.value}).eq("id",r);if(x.error)return toast(x.error.message);toast("Роль обновлена");await load()});
+</script>
+</body>
+</html>
