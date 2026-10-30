@@ -1,306 +1,541 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>OQlean — Premium Cleaning</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>OQlean — клининг квартир в Ташкенте по фиксированной цене</title>
+<meta name="description" content="Уборка квартир в Ташкенте. Цена по комнатам известна заранее, оплата после приёмки, фотоотчёт, переделка за 24 часа.">
+<meta property="og:title" content="OQlean — клининг в Ташкенте"><meta property="og:description" content="Цена известна заранее. Оплата после приёмки."><meta property="og:url" content="https://oqlean.uz"><meta property="og:image" content="https://oqlean.uz/media/v/vacuum.jpg">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head><body>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-
-body{
-font-family:'Inter',sans-serif;
-background:#0a0a0a;
-color:#fff;
+/* Layout: light "fresh linen" page; one dark receipt-like smeta card is the hero object; sections stack, 2-col on desktop */
+:root{
+  --bg:#F3F6F5; --surface:#FFFFFF; --ink:#101615; --muted:#55625F; --line:#DCE4E1;
+  --mint:#BFEDE2; --mint-ink:#0C6B5C; --receipt:#121A18; --receipt-ink:#EEF4F2; --receipt-mute:#9BB0AB;
+  --display:"Unbounded","Manrope",system-ui,sans-serif; --body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r:18px; --wrap:1180px;
 }
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0D1211;--surface:#151C1B;--ink:#EAF1EF;--muted:#9AAAA6;--line:#26302E;--mint:#1E4A42;--mint-ink:#8FE0CF;--receipt:#E9F2EF;--receipt-ink:#101615;--receipt-mute:#4D5D59;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0D1211;--surface:#151C1B;--ink:#EAF1EF;--muted:#9AAAA6;--line:#26302E;--mint:#1E4A42;--mint-ink:#8FE0CF;--receipt:#E9F2EF;--receipt-ink:#101615;--receipt-mute:#4D5D59;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{background:var(--bg);color:var(--ink);font:500 17px/1.55 var(--body);-webkit-font-smoothing:antialiased;padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))}
+@media(min-width:900px){body{padding-bottom:0}}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:var(--wrap);margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);font-weight:600;letter-spacing:-.02em;text-wrap:balance;margin:0}
+h1{font-size:clamp(34px,6.2vw,68px);line-height:1.02}
+h2{font-size:clamp(28px,4.2vw,46px);line-height:1.06}
+h3{font-size:19px;line-height:1.25;letter-spacing:-.01em}
+p{margin:0}
+a{color:inherit}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--mint-ink);outline-offset:3px;border-radius:8px}
+.num{font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.eyebrow{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mint-ink)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:54px;padding:0 24px;border-radius:999px;border:1.5px solid var(--ink);background:var(--ink);color:var(--bg);font-weight:700;font-size:16px;text-decoration:none;cursor:pointer;transition:transform .15s,background .15s}
+.btn:hover{transform:translateY(-1px)}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn svg{width:18px;height:18px}
+section{padding-block:clamp(64px,9vw,112px)}
+.sh{display:grid;gap:14px;max-width:720px;margin-bottom:clamp(28px,4vw,44px)}
+.sh p{color:var(--muted);font-size:18px}
 
-/* NAV */
-.nav{
-position:fixed;
-width:100%;
-top:0;
-display:flex;
-justify-content:space-between;
-padding:20px 80px;
-background:rgba(0,0,0,0.5);
-backdrop-filter:blur(14px);
-z-index:1000;
+/* header */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid transparent;transition:border-color .2s}
+header.sc{border-color:var(--line)}
+.hd{display:flex;align-items:center;gap:20px;height:68px}
+.logo{display:flex;align-items:center;gap:9px;font-family:var(--display);font-weight:700;font-size:20px;text-decoration:none;letter-spacing:-.02em}
+.logo i{width:20px;height:20px;border:3px solid currentColor;border-radius:50%;display:block}
+nav.mn{display:none;gap:26px;margin-left:auto;font-size:15px;font-weight:600}
+nav.mn a{text-decoration:none;color:var(--muted)} nav.mn a:hover{color:var(--ink)}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;padding:3px;margin-left:auto}
+.lang button{border:0;background:none;padding:6px 11px;border-radius:999px;font-size:13px;font-weight:700;cursor:pointer;color:var(--muted)}
+.lang button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.hd .btn{min-height:44px;padding:0 18px;font-size:15px;display:none}
+@media(min-width:900px){nav.mn{display:flex}.lang{margin-left:0}.hd .btn{display:inline-flex}}
+
+/* hero */
+.hero{padding-block:clamp(28px,5vw,64px) clamp(56px,7vw,88px)}
+.hg{display:grid;gap:40px;align-items:center}
+@media(min-width:960px){.hg{grid-template-columns:1.08fr .92fr;gap:56px}}
+.hcopy{display:grid;gap:22px;min-width:0}
+.lead{font-size:clamp(18px,1.8vw,21px);color:var(--muted);max-width:34em}
+.pc{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-width:560px}
+.pc a{display:grid;gap:2px;padding:14px 14px 12px;border:1px solid var(--line);border-radius:14px;background:var(--surface);text-decoration:none;transition:border-color .15s}
+.pc a:hover{border-color:var(--ink)}
+.pc small{font-size:13px;color:var(--muted);font-weight:600;line-height:1.3}
+.pc b{font-family:var(--display);font-weight:600;font-size:clamp(16px,2vw,20px);letter-spacing:-.02em}
+.pc span{font-size:12px;color:var(--muted)}
+.cta{display:flex;flex-wrap:wrap;gap:10px}
+.ticks{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:15px;font-weight:600;list-style:none;padding:0;margin:0}
+.ticks li{display:flex;gap:8px;align-items:center}
+.ticks svg{width:18px;height:18px;color:var(--mint-ink);flex:none}
+.hvis{position:relative;min-width:0}
+.hvid{position:relative;border-radius:28px;overflow:hidden;aspect-ratio:4/4.4;max-width:100%;background:var(--line)}
+.hvid video,.hvid img{width:100%;height:100%;object-fit:cover;display:block}
+.tag{position:absolute;left:14px;top:14px;background:rgba(255,255,255,.92);color:#101615;font-size:12px;font-weight:700;padding:6px 10px;border-radius:999px}
+.mini{position:absolute;right:-6px;bottom:-22px;width:min(270px,78%);background:var(--receipt);color:var(--receipt-ink);border-radius:18px;padding:16px 18px;box-shadow:0 20px 50px -20px rgba(0,0,0,.45);display:grid;gap:6px}
+.mini .row{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--receipt-mute)}
+.mini b{font-family:var(--display);font-weight:600;font-size:24px;letter-spacing:-.02em}
+.lock{display:flex;gap:7px;align-items:center;font-size:12px;font-weight:700;color:var(--receipt-ink)}
+.lock svg{width:14px;height:14px}
+@media(max-width:959px){.mini{right:10px}}
+
+/* calculator */
+#calc{background:var(--surface);border-block:1px solid var(--line)}
+.cg{display:grid;gap:28px}
+@media(min-width:960px){.cg{grid-template-columns:1.15fr .85fr;gap:40px;align-items:start}}
+.ctl{display:grid;gap:26px;min-width:0}
+.lbl{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:block}
+.seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.seg button,.kind button{border:1.5px solid var(--line);background:var(--bg);border-radius:14px;padding:14px 12px;text-align:left;cursor:pointer;display:grid;gap:3px;transition:border-color .15s,background .15s}
+.seg button b,.kind button b{font-size:15px;line-height:1.2}
+.seg button span,.kind button span{font-size:13px;color:var(--muted);line-height:1.3}
+.seg button[aria-pressed="true"],.kind button[aria-pressed="true"]{border-color:var(--ink);background:var(--surface);box-shadow:inset 0 0 0 1px var(--ink)}
+.kind{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.kind button{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px}
+.steps2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.stp{display:flex;align-items:center;justify-content:space-between;border:1.5px solid var(--line);border-radius:14px;padding:8px 8px 8px 16px;background:var(--bg)}
+.stp output{font-family:var(--display);font-size:26px;font-weight:600}
+.stp div{display:flex;gap:6px}
+.stp button{width:42px;height:42px;border-radius:50%;border:1.5px solid var(--line);background:var(--surface);font-size:20px;font-weight:600;cursor:pointer;line-height:1}
+.stp button:disabled{opacity:.35;cursor:default}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips label{display:flex;align-items:center;gap:8px;border:1.5px solid var(--line);border-radius:999px;padding:9px 14px;font-size:14px;font-weight:600;cursor:pointer;background:var(--bg);user-select:none}
+.chips input{position:absolute;opacity:0;pointer-events:none}
+.chips label:has(input:checked){border-color:var(--ink);background:var(--mint)}
+.chips label:has(input:focus-visible){outline:2px solid var(--mint-ink);outline-offset:2px}
+.chips em{font-style:normal;color:var(--muted);font-size:13px}
+.note{font-size:15px;color:var(--muted);background:var(--bg);border-radius:14px;padding:14px 16px}
+.rc{background:var(--receipt);color:var(--receipt-ink);border-radius:24px;padding:clamp(20px,3vw,30px);display:grid;gap:18px;min-width:0}
+@media(min-width:960px){.rc{position:sticky;top:96px}}
+.rc .top{display:flex;justify-content:space-between;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--receipt-mute)}
+.rc ul{list-style:none;margin:0;padding:0 0 14px;display:grid;gap:8px;border-bottom:1px dashed color-mix(in srgb,var(--receipt-mute) 60%,transparent)}
+.rc li{display:flex;justify-content:space-between;gap:16px;font-size:15px}
+.rc li span:first-child{color:var(--receipt-mute)}
+.tot{display:grid;gap:4px}
+.tot small{font-size:13px;color:var(--receipt-mute);font-weight:600}
+.tot b{font-family:var(--display);font-weight:600;font-size:clamp(32px,4vw,42px);letter-spacing:-.03em;line-height:1}
+.stamp{display:flex;gap:8px;align-items:center;font-size:14px;font-weight:600;color:var(--receipt-ink);background:color-mix(in srgb,var(--receipt-ink) 9%,transparent);border-radius:12px;padding:10px 12px}
+.stamp svg{width:16px;height:16px;flex:none}
+form.lf{display:grid;gap:10px}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.lf label{display:grid;gap:5px;font-size:12px;font-weight:700;color:var(--receipt-mute);letter-spacing:.04em;text-transform:uppercase;min-width:0}
+.lf input{width:100%;min-width:0;height:48px;border-radius:12px;border:1px solid color-mix(in srgb,var(--receipt-mute) 45%,transparent);background:color-mix(in srgb,var(--receipt-ink) 6%,transparent);color:var(--receipt-ink);padding:0 14px;font-size:16px;font-weight:600;text-transform:none;letter-spacing:0}
+.lf input::placeholder{color:var(--receipt-mute);font-weight:500}
+.lf .btn{background:var(--receipt-ink);color:var(--receipt);border-color:var(--receipt-ink);width:100%}
+.err{color:#FF9C8A;font-size:14px;font-weight:600}
+.done{display:grid;gap:12px}
+.done h3{font-size:22px}
+.done pre{white-space:pre-wrap;font:600 14px/1.5 var(--body);background:color-mix(in srgb,var(--receipt-ink) 7%,transparent);border-radius:12px;padding:12px 14px;margin:0;color:var(--receipt-ink)}
+.done .cta .btn{flex:1 1 160px;min-height:48px}
+.done .ghost{color:var(--receipt-ink);border-color:var(--receipt-ink);background:transparent}
+.fine{font-size:13px;color:var(--receipt-mute)}
+
+/* prices */
+.pg{display:grid;gap:14px}
+@media(min-width:900px){.pg{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.pcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:24px;display:grid;gap:16px;align-content:start}
+.pcard p{color:var(--muted);font-size:15px;min-height:2.9em}
+.pcard table{width:100%;border-collapse:collapse;font-size:15px}
+.pcard td{padding:9px 0;border-top:1px solid var(--line)}
+.pcard td:last-child{text-align:right;font-weight:700}
+.pcard .btn{min-height:48px;width:100%}
+.pcard.hi{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.pcard.hi p{color:color-mix(in srgb,var(--bg) 70%,transparent)}
+.pcard.hi td{border-color:color-mix(in srgb,var(--bg) 18%,transparent)}
+.pcard.hi .btn{background:var(--bg);color:var(--ink);border-color:var(--bg)}
+.extra{display:grid;gap:14px;margin-top:14px}
+@media(min-width:760px){.extra{grid-template-columns:1fr 1fr}}
+.xrow{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px}
+.xrow div{display:grid;gap:4px;min-width:0;flex:1 1 220px}
+.xrow p{font-size:15px;color:var(--muted)}
+.xrow .btn{min-height:44px;font-size:15px}
+.pnote{margin-top:16px;font-size:15px;color:var(--muted)}
+
+/* included */
+.tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.tabs button{border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:10px 18px;font-weight:700;font-size:15px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.zg{display:grid;gap:10px}
+@media(min-width:700px){.zg{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.zi{display:flex;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px}
+.zi svg{width:22px;height:22px;color:var(--mint-ink);flex:none;margin-top:2px}
+.zi b{display:block;font-size:16px}
+.zi span{font-size:14px;color:var(--muted)}
+.zadd{margin-top:16px;font-size:15px;color:var(--muted)}
+
+/* how */
+#how{background:var(--surface);border-block:1px solid var(--line)}
+.hw{display:grid;gap:12px;list-style:none;padding:0;margin:0;counter-reset:s}
+@media(min-width:900px){.hw{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.hw li{counter-increment:s;display:grid;gap:8px;align-content:start;padding:22px;border-radius:var(--r);background:var(--bg)}
+.hw li::before{content:counter(s);font-family:var(--display);font-weight:600;font-size:15px;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:var(--mint);color:var(--mint-ink)}
+.hw p{font-size:15px;color:var(--muted)}
+
+/* work */
+.wg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media(min-width:900px){.wg{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}}
+.wg figure{margin:0;position:relative;border-radius:var(--r);overflow:hidden;aspect-ratio:1080/880;background:var(--line)}
+.wg video{width:100%;height:100%;object-fit:cover;display:block}
+.wg figcaption{position:absolute;left:10px;bottom:10px;background:rgba(255,255,255,.92);color:#101615;font-size:12px;font-weight:700;padding:5px 10px;border-radius:999px}
+
+/* guarantees */
+.gg{display:grid;gap:12px}
+@media(min-width:700px){.gg{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:1000px){.gg{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.gi{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:24px;display:grid;gap:10px;align-content:start}
+.gi svg{width:28px;height:28px;color:var(--mint-ink)}
+.gi p{font-size:15px;color:var(--muted)}
+
+/* reviews */
+.rg{display:grid;gap:14px}
+@media(min-width:860px){.rg{grid-template-columns:1fr 1fr}}
+.rev{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:grid;gap:10px;align-content:start}
+.bub{max-width:88%;padding:10px 14px 8px;border-radius:16px;font-size:15px;line-height:1.45;display:grid;gap:2px}
+.bub time{font-size:11px;color:var(--muted);justify-self:end}
+.bub.in{background:var(--bg);border-bottom-left-radius:4px}
+.bub.out{background:var(--mint);justify-self:end;border-bottom-right-radius:4px}
+.rev figcaption{display:flex;gap:10px;align-items:center;margin-top:6px;font-size:14px;font-weight:700}
+.ava{width:34px;height:34px;border-radius:50%;background:var(--mint);color:var(--mint-ink);display:grid;place-items:center;font-weight:800}
+.rev small{display:block;color:var(--muted);font-weight:500}
+
+/* faq */
+.fq{display:grid;max-width:860px}
+.fq details{border-top:1px solid var(--line)}
+.fq details:last-child{border-bottom:1px solid var(--line)}
+.fq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;gap:16px;padding:20px 0;font-weight:700;font-size:18px}
+.fq summary::-webkit-details-marker{display:none}
+.fq summary::after{content:"+";font-family:var(--display);font-size:22px;line-height:1;color:var(--muted);transition:transform .2s}
+.fq details[open] summary::after{transform:rotate(45deg)}
+.fq p{padding:0 0 20px;color:var(--muted);max-width:62ch}
+
+/* end + footer */
+.end{background:var(--ink);color:var(--bg);border-radius:28px;padding:clamp(28px,5vw,56px);display:grid;gap:22px}
+@media(min-width:900px){.end{grid-template-columns:1.2fr .8fr;align-items:end}}
+.end p{color:color-mix(in srgb,var(--bg) 70%,transparent);font-size:18px}
+.end .btn{background:var(--bg);color:var(--ink);border-color:var(--bg)}
+.end .btn.ghost{background:transparent;color:var(--bg)}
+.ct{display:grid;gap:10px}
+.ctr{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid color-mix(in srgb,var(--bg) 18%,transparent);padding-top:12px;flex-wrap:wrap}
+.ctr span{font-size:13px;color:color-mix(in srgb,var(--bg) 60%,transparent);font-weight:600}
+.ctr b{font-size:18px}
+.ctr button{border:1px solid color-mix(in srgb,var(--bg) 35%,transparent);background:none;color:var(--bg);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700;cursor:pointer}
+footer{padding-block:36px 40px;font-size:14px;color:var(--muted)}
+.ft{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-between;align-items:center}
+
+/* mobile bar */
+.mbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;gap:8px;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:10px max(12px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
+.mbar .btn{flex:1;min-height:50px;font-size:15px;padding:0 12px}
+.mbar .btn.ghost{flex:0 0 auto}
+@media(min-width:900px){.mbar{display:none}}
+.pc small{overflow-wrap:anywhere;hyphens:auto}
+@media(max-width:560px){
+  .pc small{font-size:11.5px}.pc a{padding:12px 10px 10px}
+  .seg{grid-template-columns:1fr}
+  .seg button{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:13px 16px}
 }
-
-.nav img{height:26px;}
-
-.nav a{
-color:#aaa;
-margin-left:25px;
-text-decoration:none;
-transition:0.3s;
-}
-
-.nav a:hover{color:white}
-
-/* HERO */
-.hero{
-height:100vh;
-display:flex;
-flex-direction:column;
-justify-content:center;
-padding-left:12%;
-background:
-linear-gradient(rgba(0,0,0,0.6),#0a0a0a),
-url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c') center/cover;
-}
-
-.hero img{
-width:170px;
-margin-bottom:25px;
-opacity:0.9;
-}
-
-.hero h1{
-font-size:70px;
-font-weight:500;
-letter-spacing:-2px;
-}
-
-.hero p{
-color:#999;
-margin:15px 0;
-font-size:18px;
-}
-
-.price{
-font-size:28px;
-margin:25px 0;
-}
-
-/* BUTTON */
-.btn{
-padding:15px 28px;
-border-radius:12px;
-background:white;
-color:black;
-text-decoration:none;
-margin-right:12px;
-transition:0.3s;
-font-weight:500;
-cursor:pointer;
-}
-
-.btn:hover{
-transform:translateY(-4px);
-background:#eaeaea;
-}
-
-/* SECTION */
-.section{
-padding:140px 12%;
-}
-
-/* TITLE */
-.title{
-font-size:36px;
-margin-bottom:40px;
-}
-
-/* GRID */
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-gap:30px;
-}
-
-/* CARD */
-.card{
-background:#111;
-padding:35px;
-border-radius:18px;
-border:1px solid #1a1a1a;
-transition:0.4s;
-}
-
-.card:hover{
-transform:translateY(-10px);
-background:#151515;
-}
-
-/* BIG TEXT BLOCK */
-.big-text{
-font-size:32px;
-max-width:700px;
-line-height:1.4;
-}
-
-/* GALLERY */
-.gallery{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:20px;
-}
-
-.gallery img{
-width:100%;
-border-radius:16px;
-transition:0.4s;
-}
-
-.gallery img:hover{
-transform:scale(1.03);
-}
-
-/* REVIEWS */
-.review{
-margin-bottom:30px;
-color:#bbb;
-line-height:1.7;
-font-size:16px;
-}
-
-/* FOOTER */
-.footer{
-padding:80px 12%;
-border-top:1px solid #1a1a1a;
-color:#666;
-}
-
-/* ANIMATION */
-.fade{
-opacity:0;
-transform:translateY(40px);
-transition:1s;
-}
-
-.fade.show{
-opacity:1;
-transform:translateY(0);
-}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 </style>
-</head>
 
-<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-ok" viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-tg" viewBox="0 0 24 24"><path d="M21.5 4.2 2.9 11.4c-1 .4-1 1.8.1 2.1l4.6 1.4 1.8 5.6c.3.9 1.4 1.1 2 .4l2.6-2.7 4.7 3.5c.7.5 1.7.1 1.9-.7l3-14.6c.2-1.1-.9-2-2.1-1.6Zm-4 4.3-7.3 6.6-.3 3.3-1.5-4.6 8.6-5.6c.4-.2.8.2.5.3Z" fill="currentColor"/></symbol>
+  <symbol id="i-ph" viewBox="0 0 24 24"><path d="M6.6 3.5h2.6l1.5 4.1-2 1.4a12 12 0 0 0 6.3 6.3l1.4-2 4.1 1.5v2.6a2 2 0 0 1-2.1 2A17 17 0 0 1 4.6 5.6a2 2 0 0 1 2-2.1Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+  <symbol id="i-arr" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-cam" viewBox="0 0 24 24"><path d="M4 8.5A2 2 0 0 1 6 6.5h2l1.5-2h5L16 6.5h2a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.5" fill="none" stroke="currentColor" stroke-width="1.9"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="4" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M4.5 20.5c1.2-3.6 4-5.5 7.5-5.5s6.3 1.9 7.5 5.5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4.5h4.5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 5 6v5.5c0 4.4 3 8 7 9.5 4-1.5 7-5.1 7-9.5V6Z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="m9 12 2.2 2.2L15.5 10" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-wallet" viewBox="0 0 24 24"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H18v3M4 7.5V17a2.5 2.5 0 0 0 2.5 2.5H20V8H6.5A2.5 2.5 0 0 1 4 7.5Z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><circle cx="16" cy="14" r="1.3" fill="currentColor"/></symbol>
+</svg>
 
-<!-- NAV -->
-<div class="nav">
-<img src="logo.png">
-<div>
-<a href="#services">Услуги</a>
-<a href="#gallery">Работы</a>
-<a href="#reviews">Отзывы</a>
-<a href="#contacts">Контакты</a>
-</div>
-</div>
+<header id="hdr"><div class="wrap hd">
+  <a class="logo" href="#top" aria-label="OQlean"><i></i>OQlean</a>
+  <nav class="mn" aria-label="Разделы">
+    <a href="#calc" data-i="n1">Расчёт</a><a href="#prices" data-i="n2">Цены</a><a href="#included" data-i="n3">Что входит</a><a href="#trust" data-i="n4">Гарантии</a><a href="#faq" data-i="n5">Вопросы</a>
+  </nav>
+  <div class="lang" role="group" aria-label="Язык / Til"><button type="button" data-l="ru" aria-pressed="true">RU</button><button type="button" data-l="uz" aria-pressed="false">UZ</button></div>
+  <a class="btn" href="#calc" data-i="hb">Рассчитать уборку</a>
+</div></header>
 
-<!-- HERO -->
-<div class="hero">
-<img src="logo.png">
+<main id="top">
+<section class="hero"><div class="wrap hg">
+  <div class="hcopy">
+    <span class="eyebrow" data-i="ey">Клининг квартир в Ташкенте</span>
+    <h1 data-i="h1">Чистая квартира. Цена известна заранее.</h1>
+    <p class="lead" data-i="lead">Считаем по комнатам, а не «от» за метр. Сумма из сметы не меняется на месте, а первый заказ вы оплачиваете после того, как проверили уборку.</p>
+    <div class="pc">
+      <a href="#calc" data-t="standard"><small data-i="t1">Поддерживающая</small><b class="num" id="hp1">350 000</b><span data-i="per1">сум · 1-комн.</span></a>
+      <a href="#calc" data-t="deep"><small data-i="t2">Генеральная</small><b class="num" id="hp2">800 000</b><span data-i="per1">сум · 1-комн.</span></a>
+      <a href="#calc" data-t="reno"><small data-i="t3">После ремонта</small><b class="num" id="hp3">1 100 000</b><span data-i="per1">сум · 1-комн.</span></a>
+    </div>
+    <div class="cta">
+      <a class="btn" href="#calc"><span data-i="cta1">Рассчитать за минуту</span><svg><use href="#i-arr"/></svg></a>
+      <a class="btn ghost" href="https://t.me/Oqlean_support" target="_blank" rel="noopener"><svg><use href="#i-tg"/></svg><span data-i="cta2">Написать в Telegram</span></a>
+    </div>
+    <ul class="ticks">
+      <li><svg><use href="#i-ok"/></svg><span data-i="k1">Оплата после приёмки</span></li>
+      <li><svg><use href="#i-ok"/></svg><span data-i="k2">Фотоотчёт до и после</span></li>
+      <li><svg><use href="#i-ok"/></svg><span data-i="k3">Переделаем бесплатно за 24 ч</span></li>
+    </ul>
+  </div>
+  <div class="hvis">
+    <div class="hvid"><video src="media/v/vacuum.mp4" poster="media/v/vacuum.jpg" muted loop playsinline autoplay preload="metadata"></video><span class="tag" data-i="real">Съёмка с нашей уборки</span></div>
+    <div class="mini" aria-hidden="true">
+      <div class="row"><span data-i="mini1">Смета · генеральная, 2-комн.</span></div>
+      <b class="num" id="miniSum">1 050 000 сум</b>
+      <span class="lock"><svg><use href="#i-lock"/></svg><span data-i="lockS">Сумма зафиксирована</span></span>
+    </div>
+  </div>
+</div></section>
 
-<h1>Чистота премиум уровня</h1>
+<section id="calc"><div class="wrap">
+  <div class="sh"><span class="eyebrow" data-i="c_e">Смета</span><h2 data-i="c_h">Посчитайте точную сумму и оставьте заявку</h2><p data-i="c_p">Это итог, а не «от». Если параметры квартиры указаны верно, на месте сумма не изменится.</p></div>
+  <div class="cg">
+    <div class="ctl">
+      <div>
+        <span class="lbl" data-i="c_t">Что нужно</span>
+        <div class="seg" role="group">
+          <button type="button" data-type="standard" aria-pressed="true"><b data-i="t1">Поддерживающая</b><span data-i="t1s">Раз в 1–2 недели</span></button>
+          <button type="button" data-type="deep" aria-pressed="false"><b data-i="t2">Генеральная</b><span data-i="t2s">Каждый угол</span></button>
+          <button type="button" data-type="reno" aria-pressed="false"><b data-i="t3">После ремонта</b><span data-i="t3s">Пыль и следы работ</span></button>
+        </div>
+        <div class="kind" role="group">
+          <button type="button" data-type="dry" aria-pressed="false"><b data-i="t4">Химчистка мебели</b></button>
+          <button type="button" data-type="office" aria-pressed="false"><b data-i="t5">Офис или ЖК</b></button>
+        </div>
+      </div>
+      <div id="flatCtl" style="display:grid;gap:26px">
+        <div class="steps2">
+          <div><span class="lbl" data-i="c_r">Комнаты</span><div class="stp"><output id="rooms" class="num">1</output><div><button type="button" data-step="rooms" data-d="-1" aria-label="−">−</button><button type="button" data-step="rooms" data-d="1" aria-label="+">+</button></div></div></div>
+          <div><span class="lbl" data-i="c_b">Санузлы</span><div class="stp"><output id="baths" class="num">1</output><div><button type="button" data-step="baths" data-d="-1" aria-label="−">−</button><button type="button" data-step="baths" data-d="1" aria-label="+">+</button></div></div></div>
+        </div>
+        <div><span class="lbl" data-i="c_x">Добавить</span><div class="chips" id="opts"></div></div>
+      </div>
+      <div id="otherCtl" hidden>
+        <span class="lbl" data-i="c_k">Что чистим</span><div class="chips" id="kinds"></div>
+        <p class="note" id="otherNote" style="margin-top:14px"></p>
+      </div>
+    </div>
 
-<p>Без запаха • Безопасная химия • Результат как в отеле</p>
+    <aside class="rc" id="rcard" aria-live="polite">
+      <div class="top"><span data-i="r_h">Смета OQlean</span><span id="rDate" class="num"></span></div>
+      <ul id="rl"></ul>
+      <div class="tot"><small data-i="r_t">Итого к оплате</small><b class="num" id="sum">350 000 сум</b></div>
+      <div class="stamp" id="stamp"><svg><use href="#i-lock"/></svg><span data-i="lock">Сумма фиксируется в заявке и не растёт на месте</span></div>
+      <form class="lf" id="lf" novalidate>
+        <div class="fr">
+          <label for="fName"><span data-i="f_n">Имя</span><input id="fName" name="name" autocomplete="given-name" placeholder="Ваше имя"></label>
+          <label for="fPhone"><span data-i="f_p">Телефон</span><input id="fPhone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+998 __ ___ __ __"></label>
+        </div>
+        <div class="fr">
+          <label for="fArea"><span data-i="f_a">Район</span><input id="fArea" name="area" placeholder="Юнусабад"></label>
+          <label for="fDate"><span data-i="f_d">Когда удобно</span><input id="fDate" name="when" placeholder="Завтра утром"></label>
+        </div>
+        <input type="text" name="company" id="fHp" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+        <p class="err" id="fErr" hidden></p>
+        <button class="btn" type="submit" id="fBtn"><span data-i="f_s">Отправить заявку</span><svg><use href="#i-arr"/></svg></button>
+        <p class="fine" data-i="f_f">Менеджер напишет или позвонит, чтобы подтвердить время. Оплата после уборки.</p>
+      </form>
+      <div class="done" id="done" hidden>
+        <h3 id="dTitle"></h3>
+        <p id="dText" class="fine" style="font-size:15px"></p>
+        <pre id="dMsg" hidden></pre>
+        <div class="cta" id="dAct" hidden>
+          <button class="btn" type="button" id="dCopy"></button>
+          <a class="btn ghost" href="https://t.me/Oqlean_support" target="_blank" rel="noopener">Telegram</a>
+        </div>
+        <button class="btn ghost" type="button" id="dNew" data-i="d_new">Новая смета</button>
+      </div>
+    </aside>
+  </div>
+</div></section>
 
-<div class="price">от 550 000 сум</div>
+<section id="prices"><div class="wrap">
+  <div class="sh"><span class="eyebrow" data-i="p_e">Цены</span><h2 data-i="p_h">Все цены на одном экране</h2><p data-i="p_p">Квартира с одним санузлом, без дополнительных услуг. Скидок не делаем, потому что не завышаем цену заранее.</p></div>
+  <div class="pg" id="pg"></div>
+  <div class="extra">
+    <div class="xrow"><div><h3 data-i="t4">Химчистка мебели</h3><p data-i="x1">Диваны, кресла, матрасы и ковры. От 99 000 сум за предмет, точную сумму назовём по фото.</p></div><a class="btn ghost" href="#calc" data-t="dry" data-i="x_b">Оставить заявку</a></div>
+    <div class="xrow"><div><h3 data-i="t5">Офис или ЖК</h3><p data-i="x2">Разовая или регулярная уборка по договору. Считаем по площади после осмотра.</p></div><a class="btn ghost" href="#calc" data-t="office" data-i="x_b2">Запросить расчёт</a></div>
+  </div>
+  <p class="pnote" id="pnote"></p>
+</div></section>
 
-<div>
-<a class="btn" href="https://wa.me/998507572314">Заказать уборку</a>
-</div>
-</div>
+<section id="included"><div class="wrap">
+  <div class="sh"><span class="eyebrow" data-i="z_e">Стандарт</span><h2 data-i="z_h">Что входит в поддерживающую уборку</h2><p data-i="z_p">Один чек-лист для каждого клинера. Вы заранее знаете, что будет сделано.</p></div>
+  <div class="tabs" role="tablist">
+    <button type="button" role="tab" data-z="flat" aria-selected="true" data-i="z1">Комнаты</button>
+    <button type="button" role="tab" data-z="kitchen" aria-selected="false" data-i="z2">Кухня</button>
+    <button type="button" role="tab" data-z="bath" aria-selected="false" data-i="z3">Санузел</button>
+  </div>
+  <div class="zg" id="zg" role="tabpanel"></div>
+  <p class="zadd" data-i="z_n">Стены, потолки, внутри шкафов и застарелые пятна входят в генеральную уборку. Окна, балкон, холодильник и духовку можно добавить в смете.</p>
+</div></section>
 
-<!-- BRAND BLOCK -->
-<div class="section fade">
-<div class="big-text">
-Мы не просто убираем квартиру —  
-мы возвращаем ощущение нового пространства  
-и чистоты, в котором приятно жить
-</div>
-</div>
+<section id="how"><div class="wrap">
+  <div class="sh"><span class="eyebrow" data-i="h_e">Как проходит заказ</span><h2 data-i="h_h">Четыре шага, всё в Telegram</h2></div>
+  <ol class="hw">
+    <li><h3 data-i="s1h">Смета и время</h3><p data-i="s1p">Подтверждаем сумму из калькулятора и удобный слот.</p></li>
+    <li><h3 data-i="s2h">Кто придёт</h3><p data-i="s2p">Накануне присылаем имя и фото клинера. Он приходит в форме OQlean.</p></li>
+    <li><h3 data-i="s3h">Уборка и фотоотчёт</h3><p data-i="s3p">После работы присылаем фото до и после, даже если вас нет дома.</p></li>
+    <li><h3 data-i="s4h">Приёмка и оплата</h3><p data-i="s4p">Проверили, всё нравится, оплатили. Если что-то упустили, вернёмся за 24 часа.</p></li>
+  </ol>
+</div></section>
 
-<!-- SERVICES -->
-<div class="section fade" id="services">
-<div class="title">Услуги</div>
+<section id="work"><div class="wrap">
+  <div class="sh"><span class="eyebrow" data-i="w_e">Наша работа</span><h2 data-i="w_h">Кадры с наших уборок в Ташкенте</h2></div>
+  <div class="wg">
+    <figure><video data-src="media/v/hall.mp4" poster="media/v/hall.jpg" muted loop playsinline preload="none"></video><figcaption data-i="w1">Коридор</figcaption></figure>
+    <figure><video data-src="media/v/mop.mp4" poster="media/v/mop.jpg" muted loop playsinline preload="none"></video><figcaption data-i="w2">Полы</figcaption></figure>
+    <figure><video data-src="media/v/glass.mp4" poster="media/v/glass.jpg" muted loop playsinline preload="none"></video><figcaption data-i="w3">Душевая</figcaption></figure>
+    <figure><video data-src="media/v/carpet.mp4" poster="media/v/carpet.jpg" muted loop playsinline preload="none"></video><figcaption data-i="w4">Химчистка ковра</figcaption></figure>
+    <figure><video data-src="media/v/mattress.mp4" poster="media/v/mattress.jpg" muted loop playsinline preload="none"></video><figcaption data-i="w5">Химчистка матраса</figcaption></figure>
+    <figure><video data-src="media/v/leaf.mp4" poster="media/v/leaf.jpg" muted loop playsinline preload="none"></video><figcaption data-i="w6">Пыль на растениях</figcaption></figure>
+  </div>
+</div></section>
 
-<div class="grid">
+<section id="trust"><div class="wrap">
+  <div class="sh"><span class="eyebrow" data-i="g_e">Гарантии</span><h2 data-i="g_h">Что мы обещаем каждому клиенту</h2></div>
+  <div class="gg">
+    <div class="gi"><svg><use href="#i-lock"/></svg><h3 data-i="g1h">Цена в смете равна цене в чеке</h3><p data-i="g1p">Никаких «это не входило» на месте. Сумма меняется, только если квартира больше, чем указано, и мы предупредим до начала работы.</p></div>
+    <div class="gi"><svg><use href="#i-user"/></svg><h3 data-i="g2h">Вы знаете, кто придёт</h3><p data-i="g2p">Имя и фото клинера накануне в Telegram. Дверь откроете человеку, которого уже видели.</p></div>
+    <div class="gi"><svg><use href="#i-cam"/></svg><h3 data-i="g3h">Фотоотчёт до и после</h3><p data-i="g3p">Результат видно, даже если вы на работе.</p></div>
+    <div class="gi"><svg><use href="#i-wallet"/></svg><h3 data-i="g4h">Первый заказ без предоплаты</h3><p data-i="g4p">По Ташкенту платите после того, как проверили уборку.</p></div>
+    <div class="gi"><svg><use href="#i-back"/></svg><h3 data-i="g5h">Переделка за 24 часа</h3><p data-i="g5p">Если что-то упустили, клинер вернётся и исправит бесплатно.</p></div>
+    <div class="gi"><svg><use href="#i-shield"/></svg><h3 data-i="g6h">Возмещаем ущерб</h3><p data-i="g6p">Если что-то повредили, напишите с фото. Разберёмся и компенсируем.</p></div>
+  </div>
+</div></section>
 
-<div class="card">
-<h3>Поддерживающая уборка</h3>
-<p>Регулярная чистота без лишнего</p>
-</div>
+<section id="reviews"><div class="wrap">
+  <div class="sh"><span class="eyebrow" data-i="r_e">Отзывы</span><h2 data-i="rv_h">Что пишут клиенты</h2><p data-i="rv_p">Переписки из нашего Telegram. После каждой уборки мы спрашиваем, всё ли в порядке.</p></div>
+  <div class="rg">
+    <figure class="rev"><div class="bub in"><span>Ибрагим, вам, Нурлану и вашей команде девушек огромное спасибо, я очень довольна подходом и самой работой, буду обязательно приглашать вас и рекомендовать 💯</span><time>21:27</time></div><figcaption><span class="ava">В</span><span data-i="rv1n">Клиентка OQlean<small>Telegram</small></span></figcaption></figure>
+    <figure class="rev"><div class="bub out"><span>Assalomu alaykum! Yaxshimisiz? Kechagi klining qoniqarli bo‘ldimi, kamchiliklari yo‘qmi?</span><time>20:59</time></div><div class="bub in"><span>Ассалому алайкум яхшимисиз. Йок хаммаси жойида</span><time>21:27</time></div><div class="bub out"><span>Rahmat, barchasi ko‘nglingizdagidek bo‘ldimi?</span><time>21:35</time></div><div class="bub in"><span>Рахмат шунде 🙏</span><time>22:16</time></div><figcaption><span class="ava">К</span><span data-i="rv2n">Клиент, на следующий день<small>Telegram</small></span></figcaption></figure>
+  </div>
+</div></section>
 
-<div class="card">
-<h3>Генеральная уборка</h3>
-<p>Глубокая очистка всех зон и поверхностей</p>
-</div>
+<section id="faq"><div class="wrap">
+  <div class="sh"><span class="eyebrow" data-i="q_e">Вопросы</span><h2 data-i="q_h">Частые вопросы</h2></div>
+  <div class="fq" id="fq"></div>
+</div></section>
 
-<div class="card">
-<h3>После ремонта</h3>
-<p>Удаление пыли и сложных загрязнений</p>
-</div>
+<section style="padding-top:0"><div class="wrap">
+  <div class="end">
+    <div style="display:grid;gap:14px"><h2 data-i="e_h">Узнайте сумму за минуту</h2><p data-i="e_p">Смета без звонков и уточнений. Если удобнее голосом, позвоните.</p>
+      <div class="cta"><a class="btn" href="#calc"><span data-i="cta1">Рассчитать за минуту</span><svg><use href="#i-arr"/></svg></a></div></div>
+    <div class="ct">
+      <div class="ctr"><div><span data-i="e_ph">Телефон</span><br><b class="num">+998 91 299 85 00</b></div><button type="button" data-copy="+998 91 299 85 00" data-i="cp">Копировать</button></div>
+      <div class="ctr"><div><span>Telegram</span><br><b><a href="https://t.me/Oqlean_support" target="_blank" rel="noopener" style="text-decoration:none">@Oqlean_support</a></b></div></div>
+      <div class="ctr"><div><span>Instagram</span><br><b><a href="https://www.instagram.com/oqlean/" target="_blank" rel="noopener" style="text-decoration:none">@oqlean</a></b></div></div>
+    </div>
+  </div>
+</div></section>
+</main>
 
-</div>
-</div>
+<footer><div class="wrap ft"><span class="logo" style="font-size:16px"><i style="width:16px;height:16px"></i>OQlean</span><span data-i="ft">Клининг и химчистка · Ташкент</span><span>oqlean.uz</span></div></footer>
 
-<!-- GALLERY -->
-<div class="section fade" id="gallery">
-<div class="title">До / После</div>
-
-<div class="gallery">
-<img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952">
-<img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6">
-<img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c">
-<img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a">
-</div>
-</div>
-
-<!-- REVIEWS -->
-<div class="section fade" id="reviews">
-<div class="title">Отзывы</div>
-
-<div class="review">
-После ремонта квартира была в ужасном состоянии.  
-Сделали так, что стало лучше чем было изначально.  
-Очень аккуратно, без запаха и видно что работают профессионально.
-</div>
-
-<div class="review">
-Заказывал генеральную уборку — честно не ожидал такого уровня.  
-Все идеально, даже мелочи. Буду обращаться ещё.
-</div>
-
-<div class="review">
-Очень важно было чтобы без химического запаха.  
-Сделали идеально, можно сразу жить. Рекомендую.
-</div>
-
-</div>
-
-<!-- CONTACT -->
-<div class="section fade" id="contacts">
-<div class="title">Контакты</div>
-
-<p>📞 +998 50 757 23 14</p>
-
-<a class="btn" href="https://wa.me/998507572314">WhatsApp</a>
-
-<p style="margin-top:20px;">Instagram: @Oqlean</p>
-
-</div>
-
-<div class="footer">
-OQlean © 2026
-</div>
+<div class="mbar"><a class="btn ghost" href="https://t.me/Oqlean_support" target="_blank" rel="noopener" aria-label="Telegram"><svg><use href="#i-tg"/></svg></a><a class="btn" href="#calc" id="mbBtn"><span data-i="mb">Рассчитать уборку</span></a></div>
 
 <script>
-const observer=new IntersectionObserver(entries=>{
-entries.forEach(entry=>{
-if(entry.isIntersecting){
-entry.target.classList.add('show');
+const PHONE="+998 91 299 85 00";
+const PRICES={standard:{rooms:[350000,450000,550000,650000],bath:70000,perRoom:100000},deep:{rooms:[800000,1050000,1300000,1550000],bath:120000,perRoom:250000},reno:{rooms:[1100000,1450000,1800000,2150000],bath:150000,perRoom:350000}};
+const OPTIONS=[{id:"win",p:50000,ru:"Окно",uz:"Deraza"},{id:"balc",p:120000,ru:"Балкон",uz:"Balkon"},{id:"fridge",p:70000,ru:"Холодильник внутри",uz:"Muzlatgich ichi"},{id:"oven",p:70000,ru:"Духовка внутри",uz:"Duxovka ichi"},{id:"micro",p:30000,ru:"Микроволновка",uz:"Mikroto‘lqinli pech"},{id:"cab",p:90000,ru:"Кухонные шкафы внутри",uz:"Oshxona shkaflari ichi"},{id:"iron",p:60000,ru:"Глажка, 1 час",uz:"Dazmollash, 1 soat"},{id:"pet",p:60000,ru:"Шерсть питомцев",uz:"Uy hayvoni juni"},{id:"lamp",p:50000,ru:"Люстра",uz:"Qandil"}];
+const KINDS={dry:{ru:["Диван","Кресло","Матрас","Ковёр","Стулья"],uz:["Divan","Kreslo","Matras","Gilam","Stullar"]},office:{ru:["Офис","Жилой комплекс","Коммерческое помещение"],uz:["Ofis","Turar-joy majmuasi","Tijorat binosi"]}};
+const ZONES={
+ flat:{ru:[["Полы и плинтусы","Сухая и влажная уборка"],["Пыль на поверхностях","Мебель, техника, подоконники, двери"],["Ковры и мягкая мебель","Пылесосом"],["Зеркала и стекло","Без разводов"],["Постель и вещи","Заправим кровать, сложим вещи"],["Мусор","Соберём и вынесем"]],
+       uz:[["Pol va plintuslar","Quruq va nam tozalash"],["Yuzalardagi chang","Mebel, texnika, tokchalar, eshiklar"],["Gilam va yumshoq mebel","Changyutgich bilan"],["Oyna va shishalar","Dog‘siz"],["Ko‘rpa va narsalar","Karavotni yig‘amiz, narsalarni taxlaymiz"],["Chiqindi","Yig‘ib, olib chiqamiz"]]},
+ kitchen:{ru:[["Раковина и смеситель","Вместе с плиткой вокруг"],["Столешница и фартук","Жир и следы готовки"],["Плита","Решётки, ручки, фасад"],["Фасады и вытяжка","Снаружи"],["Посуда","Что осталось в раковине"],["Обеденный стол","Столешница и ножки"]],
+          uz:[["Rakovina va jo‘mrak","Atrofidagi kafel bilan"],["Stol usti va fartuk","Yog‘ va ovqat izlari"],["Plita","Panjara, tutqich, old qismi"],["Shkaf va vytyajka","Tashqi tomondan"],["Idish-tovoq","Rakovinada qolgani"],["Ovqat stoli","Usti va oyoqlari"]]},
+ bath:{ru:[["Ванна или душ","Вместе с плиткой вокруг"],["Раковина и смеситель","Без следов воды"],["Унитаз","Моем и дезинфицируем"],["Зеркало","До блеска"],["Полотенцесушитель","Протираем"],["Пол","Влажная уборка"]],
+       uz:[["Vanna yoki dush","Atrofidagi kafel bilan"],["Rakovina va jo‘mrak","Suv izlarisiz"],["Unitaz","Yuvamiz va dezinfeksiya qilamiz"],["Oyna","Yaltiratamiz"],["Sochiq quritgich","Artamiz"],["Pol","Nam tozalash"]]}};
+const FAQ={
+ ru:[["Цена правда не изменится на месте?","Да. Сумма из сметы фиксируется. Она может измениться, только если параметры квартиры указаны неверно, например комнат больше. Тогда мы предупредим до начала работы."],["Как я узнаю, кто придёт?","Накануне пришлём в Telegram имя и фото клинера. Придёт именно этот человек, в форме OQlean."],["Нужна ли предоплата?","Нет. Первый заказ по Ташкенту вы оплачиваете после того, как проверили уборку."],["Что если результат не понравится?","Напишите нам. Клинер вернётся в течение 24 часов и бесплатно исправит недочёты."],["А если что-то повредят?","Мы возместим ущерб. Напишите нам с фото, разберёмся и компенсируем."],["Нужно ли быть дома?","Не обязательно. Встретьте клинера и занимайтесь делами, результат увидите в фотоотчёте."],["Почему у вас нет скидок?","Мы не завышаем цену, чтобы потом её «снижать». Вы сразу платите честную сумму."]],
+ uz:[["Narx joyida haqiqatan o‘zgarmaydimi?","Ha. Smetadagi summa qat’iy. U faqat kvartira parametrlari noto‘g‘ri ko‘rsatilsa o‘zgarishi mumkin, masalan xonalar ko‘proq bo‘lsa. Bunda ish boshlanishidan oldin ogohlantiramiz."],["Kim kelishini qanday bilaman?","Bir kun oldin Telegramda klinerning ismi va suratini yuboramiz. Aynan shu odam OQlean formasida keladi."],["Oldindan to‘lov kerakmi?","Yo‘q. Toshkent bo‘yicha birinchi buyurtmani tozalashni tekshirganingizdan keyin to‘laysiz."],["Natija yoqmasa-chi?","Bizga yozing. Kliner 24 soat ichida qaytib keladi va kamchiliklarni bepul tuzatadi."],["Biror narsa shikastlansa-chi?","Zararni qoplaymiz. Surat bilan yozing, ko‘rib chiqib, kompensatsiya qilamiz."],["Uyda bo‘lishim kerakmi?","Shart emas. Klinerni kutib oling va ishingiz bilan shug‘ullaning, natijani fotohisobotda ko‘rasiz."],["Nega chegirmalar yo‘q?","Biz narxni keyin «tushirish» uchun oshirmaymiz. Siz darhol halol summani to‘laysiz."]]};
+const T={ru:{},uz:{n1:"Hisob",n2:"Narxlar",n3:"Nima kiradi",n4:"Kafolatlar",n5:"Savollar",hb:"Narxni hisoblash",ey:"Toshkentda kvartira tozalash",h1:"Toza uy. Narx oldindan ma’lum.",lead:"Metr uchun «dan» emas, xonalar bo‘yicha hisoblaymiz. Smetadagi summa joyida o‘zgarmaydi, birinchi buyurtmani esa tozalashni tekshirgach to‘laysiz.",t1:"Doimiy",t2:"General",t3:"Ta’mirdan keyin",t4:"Mebel ximchistkasi",t5:"Ofis yoki TJM",per1:"so‘m · 1 xonali",cta1:"Bir daqiqada hisoblash",cta2:"Telegramga yozish",k1:"Qabul qilgach to‘lov",k2:"Oldin va keyin fotohisobot",k3:"24 soatda bepul tuzatamiz",real:"Tozalashimizdan kadr",mini1:"Smeta · general, 2 xonali",lockS:"Summa qat’iy",c_e:"Smeta",c_h:"Aniq summani hisoblang va ariza qoldiring",c_p:"Bu «dan» emas, yakuniy summa. Kvartira parametrlari to‘g‘ri ko‘rsatilsa, joyida o‘zgarmaydi.",c_t:"Nima kerak",t1s:"1–2 haftada bir",t2s:"Har bir burchak",t3s:"Chang va ish izlari",c_r:"Xonalar",c_b:"Sanuzellar",c_x:"Qo‘shish",c_k:"Nimani tozalaymiz",r_h:"OQlean smetasi",r_t:"Jami to‘lov",lock:"Summa arizada qayd etiladi va joyida oshmaydi",f_n:"Ism",f_p:"Telefon",f_a:"Tuman",f_d:"Qachon qulay",f_s:"Ariza yuborish",f_f:"Menejer vaqtni tasdiqlash uchun yozadi yoki qo‘ng‘iroq qiladi. To‘lov tozalashdan keyin.",d_new:"Yangi smeta",p_e:"Narxlar",p_h:"Barcha narxlar bitta ekranda",p_p:"Bitta sanuzelli kvartira, qo‘shimcha xizmatlarsiz. Chegirma qilmaymiz, chunki narxni oldindan oshirmaymiz.",x1:"Divan, kreslo, matras va gilamlar. Bir buyum uchun 99 000 so‘mdan, aniq summani surat bo‘yicha aytamiz.",x2:"Shartnoma asosida bir martalik yoki muntazam tozalash. Ko‘rikdan keyin maydon bo‘yicha hisoblaymiz.",x_b:"Ariza qoldirish",x_b2:"Hisob so‘rash",z_e:"Standart",z_h:"Doimiy tozalashga nima kiradi",z_p:"Har bir kliner uchun yagona chek-list. Nima qilinishini oldindan bilasiz.",z1:"Xonalar",z2:"Oshxona",z3:"Sanuzel",z_n:"Devor, shift, shkaflar ichi va eski dog‘lar general tozalashga kiradi. Deraza, balkon, muzlatgich va duxovkani smetaga qo‘shish mumkin.",h_e:"Buyurtma qanday o‘tadi",h_h:"To‘rt qadam, hammasi Telegramda",s1h:"Smeta va vaqt",s1p:"Kalkulyatordagi summani va qulay vaqtni tasdiqlaymiz.",s2h:"Kim keladi",s2p:"Bir kun oldin klinerning ismi va suratini yuboramiz. U OQlean formasida keladi.",s3h:"Tozalash va fotohisobot",s3p:"Ishdan keyin oldin va keyin suratlarini yuboramiz, uyda bo‘lmasangiz ham.",s4h:"Qabul va to‘lov",s4p:"Tekshirdingiz, yoqdi, to‘ladingiz. Biror narsa qolib ketsa, 24 soatda qaytamiz.",w_e:"Bizning ish",w_h:"Toshkentdagi tozalashlarimizdan kadrlar",w1:"Koridor",w2:"Pol",w3:"Dush",w4:"Gilam ximchistkasi",w5:"Matras ximchistkasi",w6:"O‘simlik changi",g_e:"Kafolatlar",g_h:"Har bir mijozga va’damiz",g1h:"Smetadagi narx chekdagi narxga teng",g1p:"Joyida «bu kirmagan edi» degan gaplar yo‘q. Summa faqat kvartira ko‘rsatilganidan katta bo‘lsa o‘zgaradi va buni ish boshlanishidan oldin aytamiz.",g2h:"Kim kelishini bilasiz",g2p:"Bir kun oldin Telegramda klinerning ismi va surati. Eshikni oldindan ko‘rgan odamingizga ochasiz.",g3h:"Oldin va keyin fotohisobot",g3p:"Ishda bo‘lsangiz ham natijani ko‘rasiz.",g4h:"Birinchi buyurtma oldindan to‘lovsiz",g4p:"Toshkent bo‘yicha tozalashni tekshirgach to‘laysiz.",g5h:"24 soatda tuzatish",g5p:"Biror narsa qolib ketsa, kliner qaytib kelib bepul tuzatadi.",g6h:"Zararni qoplaymiz",g6p:"Biror narsa shikastlansa, surat bilan yozing. Ko‘rib chiqib, kompensatsiya qilamiz.",r_e:"Sharhlar",rv_h:"Mijozlar nima yozadi",rv_p:"Telegramimizdagi yozishmalar. Har bir tozalashdan keyin hammasi joyidami, deb so‘raymiz.",rv1n:"OQlean mijozi<small>Telegram</small>",rv2n:"Mijoz, ertasi kuni<small>Telegram</small>",q_e:"Savollar",q_h:"Ko‘p beriladigan savollar",e_h:"Summani bir daqiqada biling",e_p:"Qo‘ng‘iroq va aniqlashtirishlarsiz smeta. Ovozli qulayroq bo‘lsa, qo‘ng‘iroq qiling.",e_ph:"Telefon",cp:"Nusxalash",ft:"Klining va ximchistka · Toshkent",mb:"Narxni hisoblash"}};
+const S={ru:{sum:"сум",room:n=>n+"-комн.",bathX:"Доп. санузел",reqT:"Заявка отправлена",reqP:"Менеджер свяжется с вами, чтобы подтвердить время.",failT:"Отправьте смету нам",failP:"Скопируйте текст и пришлите в Telegram или позвоните: "+PHONE+".",copy:"Скопировать смету",copied:"Скопировано",selected:"Текст выделен, скопируйте",err:"Укажите имя и номер телефона, чтобы мы могли связаться.",pick:"Выбрать",dryNote:"Химчистка от 99 000 сум за предмет. Пришлите фото в Telegram после заявки, и мы назовём точную сумму.",offNote:"Считаем по площади после осмотра. Оставьте контакты, менеджер договорится о визите.",dryLine:"Химчистка",offLine:"Уборка офиса / ЖК",byPhoto:"по фото",bySurvey:"после осмотра",pnote:"Каждый дополнительный санузел: +70 000, +120 000 и +150 000 сум соответственно. 5 комнат и больше считаем в калькуляторе.",sending:"Отправляем…",kick:"Заявка OQlean",tot:"Итого",nm:"Имя",ph:"Телефон",ar:"Район",wh:"Когда",lockF:"Сумма фиксируется в заявке и не растёт на месте",lockO:"Сумму назовём до начала работ",toForm:"Оформить"},
+ uz:{sum:"so‘m",room:n=>n+" xonali",bathX:"Qo‘shimcha sanuzel",reqT:"Ariza yuborildi",reqP:"Menejer vaqtni tasdiqlash uchun siz bilan bog‘lanadi.",failT:"Smetani bizga yuboring",failP:"Matnni nusxalab Telegramga yuboring yoki qo‘ng‘iroq qiling: "+PHONE+".",copy:"Smetani nusxalash",copied:"Nusxalandi",selected:"Matn belgilandi, nusxalang",err:"Bog‘lanishimiz uchun ism va telefon raqamini kiriting.",pick:"Tanlash",dryNote:"Ximchistka bir buyum uchun 99 000 so‘mdan. Arizadan keyin Telegramga surat yuboring, aniq summani aytamiz.",offNote:"Ko‘rikdan keyin maydon bo‘yicha hisoblaymiz. Kontaktlaringizni qoldiring, menejer tashrif vaqtini kelishadi.",dryLine:"Ximchistka",offLine:"Ofis / TJM tozalash",byPhoto:"surat bo‘yicha",bySurvey:"ko‘rikdan keyin",pnote:"Har bir qo‘shimcha sanuzel: mos ravishda +70 000, +120 000 va +150 000 so‘m. 5 va undan ko‘p xonani kalkulyatorda hisoblang.",sending:"Yuborilmoqda…",kick:"OQlean arizasi",tot:"Jami",nm:"Ism",ph:"Telefon",ar:"Tuman",wh:"Qachon",lockF:"Summa arizada qayd etiladi va joyida oshmaydi",lockO:"Summani ish boshlanishidan oldin aytamiz",toForm:"Rasmiylashtirish"}};
+const PDESC={ru:["Регулярно, чтобы дома всегда было чисто.","Глубоко: каждый угол и труднодоступное.","Пыль, краска и затирка после работ."],uz:["Uy doim toza bo‘lishi uchun muntazam.","Chuqur: har bir burchak va qiyin joylar.","Ishlardan keyingi chang, bo‘yoq va zatirka."]};
+const TYPES=["standard","deep","reno"],TKEY={standard:"t1",deep:"t2",reno:"t3",dry:"t4",office:"t5"};
+const st={lang:"ru",type:"standard",rooms:1,baths:1,opts:{},kinds:{},zone:"flat"};
+try{const l=localStorage.getItem("oq2_lang");if(l==="uz"||l==="ru")st.lang=l}catch(e){}
+const $=id=>document.getElementById(id);
+const fmt=n=>n.toLocaleString("ru-RU").replace(/ | /g," ");
+document.querySelectorAll("[data-i]").forEach(el=>{const k=el.dataset.i;if(!(k in T.ru))T.ru[k]=el.innerHTML});
+const tx=k=>(T[st.lang][k]??T.ru[k]);
+const isFlat=()=>TYPES.includes(st.type);
+const base=()=>{const P=PRICES[st.type];return st.rooms<=4?P.rooms[st.rooms-1]:P.rooms[3]+(st.rooms-4)*P.perRoom};
+const total=()=>{let s=base()+(st.baths-1)*PRICES[st.type].bath;OPTIONS.forEach(o=>{if(st.opts[o.id])s+=o.p});return s};
+function lines(){const L=st.lang,s=S[L];
+  if(!isFlat()){const ks=KINDS[st.type][L].filter((k,i)=>st.kinds[st.type+i]);return [[(st.type==="dry"?s.dryLine:s.offLine)+(ks.length?": "+ks.join(", "):""),st.type==="dry"?s.byPhoto:s.bySurvey]]}
+  const r=[[tx(TKEY[st.type])+" · "+s.room(st.rooms),fmt(base())]];
+  if(st.baths>1)r.push([s.bathX+" × "+(st.baths-1),fmt((st.baths-1)*PRICES[st.type].bath)]);
+  OPTIONS.forEach(o=>{if(st.opts[o.id])r.push([o[L],fmt(o.p)])});return r}
+function renderCalc(){const L=st.lang,s=S[L];
+  document.querySelectorAll("button[data-type]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.type===st.type));
+  $("flatCtl").hidden=!isFlat();$("flatCtl").style.display=isFlat()?"grid":"none";$("otherCtl").hidden=isFlat();
+  $("rooms").textContent=st.rooms;$("baths").textContent=st.baths;
+  document.querySelectorAll("[data-step]").forEach(b=>{const v=st[b.dataset.step],d=+b.dataset.d;b.disabled=(d<0&&v<=1)||(d>0&&v>=(b.dataset.step==="rooms"?8:4))});
+  $("opts").innerHTML=OPTIONS.map(o=>`<label><input type="checkbox" id="o_${o.id}" data-o="${o.id}" ${st.opts[o.id]?"checked":""}>${o[L]} <em>+${fmt(o.p)}</em></label>`).join("");
+  if(!isFlat()){$("kinds").innerHTML=KINDS[st.type][L].map((k,i)=>`<label><input type="checkbox" id="k_${st.type}${i}" data-k="${st.type+i}" ${st.kinds[st.type+i]?"checked":""}>${k}</label>`).join("");$("otherNote").textContent=st.type==="dry"?s.dryNote:s.offNote}
+  $("rl").innerHTML=lines().map(([n,p])=>`<li><span>${n}</span><span class="num">${p}</span></li>`).join("");
+  $("sum").textContent=isFlat()?fmt(total())+" "+s.sum:(st.type==="dry"?"99 000+ "+s.sum:"—");
+  $("stamp").lastElementChild.textContent=isFlat()?s.lockF:s.lockO;
+  mbar();
 }
+let inCalc=false;
+function mbar(){const b=$("mbBtn"),s=S[st.lang];if(inCalc){b.href="#rcard";b.firstElementChild.textContent=(isFlat()?fmt(total())+" "+s.sum+" · ":"")+s.toForm}else{b.href="#calc";b.firstElementChild.textContent=tx("mb")}}
+new IntersectionObserver(es=>{inCalc=es[0].isIntersecting;mbar()},{rootMargin:"-30% 0px -30% 0px"}).observe(document.getElementById("calc"));
+function renderPrices(){const L=st.lang,s=S[L];
+  $("pg").innerHTML=TYPES.map((t,i)=>`<div class="pcard${i===1?" hi":""}"><h3>${tx(TKEY[t])}</h3><p>${PDESC[L][i]}</p><table class="num"><tbody>${PRICES[t].rooms.map((p,j)=>`<tr><td>${s.room(j+1)}</td><td>${fmt(p)} ${s.sum}</td></tr>`).join("")}</tbody></table><a class="btn${i===1?"":" ghost"}" href="#calc" data-t="${t}">${s.pick}</a></div>`).join("");
+  $("pnote").textContent=s.pnote;
+  ["standard","deep","reno"].forEach((t,i)=>$("hp"+(i+1)).textContent=fmt(PRICES[t].rooms[0]));
+  $("miniSum").textContent=fmt(PRICES.deep.rooms[1])+" "+s.sum;
+}
+function renderZones(){const L=st.lang;
+  document.querySelectorAll("[data-z]").forEach(b=>b.setAttribute("aria-selected",b.dataset.z===st.zone));
+  $("zg").innerHTML=ZONES[st.zone][L].map(([h,p])=>`<div class="zi"><svg><use href="#i-ok"/></svg><div><b>${h}</b><span>${p}</span></div></div>`).join("")}
+function renderFaq(){$("fq").innerHTML=FAQ[st.lang].map(([q,a])=>`<details><summary>${q}</summary><p>${a}</p></details>`).join("")}
+function setLang(l){st.lang=l;document.documentElement.lang=l==="uz"?"uz":"ru";try{localStorage.setItem("oq2_lang",l)}catch(e){}
+  document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.l===l));
+  document.querySelectorAll("[data-i]").forEach(el=>{el.innerHTML=tx(el.dataset.i)});
+  renderCalc();renderPrices();renderZones();renderFaq();
+  $("rDate").textContent=new Date().toLocaleDateString(l==="uz"?"uz-UZ":"ru-RU",{day:"2-digit",month:"2-digit",year:"numeric"})}
+document.addEventListener("click",e=>{
+  const lb=e.target.closest(".lang button");if(lb)return setLang(lb.dataset.l);
+  const tb=e.target.closest("button[data-type]");if(tb){st.type=tb.dataset.type;return renderCalc()}
+  const tl=e.target.closest("a[data-t]");if(tl){st.type=tl.dataset.t;renderCalc()}
+  const sb=e.target.closest("[data-step]");if(sb){const k=sb.dataset.step;st[k]=Math.max(1,Math.min(k==="rooms"?8:4,st[k]+ +sb.dataset.d));return renderCalc()}
+  const zb=e.target.closest("[data-z]");if(zb){st.zone=zb.dataset.z;return renderZones()}
+  const cb=e.target.closest("[data-copy]");if(cb){copyText(cb.dataset.copy,cb,null)}
 });
+document.addEventListener("change",e=>{const o=e.target.dataset.o,k=e.target.dataset.k;if(o){st.opts[o]=e.target.checked;renderCalc()}if(k){st.kinds[k]=e.target.checked;renderCalc()}});
+function copyText(t,btn,pre){const s=S[st.lang],old=btn.textContent;
+  const ok=()=>{btn.textContent=s.copied;setTimeout(()=>btn.textContent=old,1600)};
+  const sel=()=>{if(pre){const r=document.createRange();r.selectNodeContents(pre);const w=getSelection();w.removeAllRanges();w.addRange(r);btn.textContent=s.selected}};
+  try{navigator.clipboard.writeText(t).then(ok,sel)}catch(e){sel()}}
+function message(f){const s=S[st.lang];
+  return [s.kick,...lines().map(([n,p])=>"• "+n+" — "+p),isFlat()?s.tot+": "+fmt(total())+" "+s.sum:"",
+    s.nm+": "+f.name,s.ph+": "+f.phone,f.area?s.ar+": "+f.area:"",f.when?s.wh+": "+f.when:""].filter(Boolean).join("\n")}
+$("lf").addEventListener("submit",async e=>{e.preventDefault();const s=S[st.lang];
+  const f={name:$("fName").value.trim(),phone:$("fPhone").value.trim(),area:$("fArea").value.trim(),when:$("fDate").value.trim()};
+  if(!f.name||f.phone.replace(/\D/g,"").length<9){$("fErr").textContent=s.err;$("fErr").hidden=false;return}
+  $("fErr").hidden=true;const btn=$("fBtn");btn.disabled=true;btn.firstElementChild.textContent=s.sending;
+  const text=message(f);let sent=false;
+  try{const r=await fetch("/api/lead",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({company:$("fHp").value,text,lang:st.lang,type:st.type,total:isFlat()?total():null,...f})});sent=r.ok}catch(err){}
+  btn.disabled=false;btn.firstElementChild.textContent=tx("f_s");
+  $("lf").hidden=true;$("done").hidden=false;
+  $("dTitle").textContent=sent?s.reqT:s.failT;$("dText").textContent=sent?s.reqP:s.failP;
+  $("dMsg").hidden=sent;$("dAct").hidden=sent;$("dMsg").textContent=text;$("dCopy").textContent=s.copy;
+  $("dCopy").onclick=()=>copyText(text,$("dCopy"),$("dMsg"));
 });
-
-document.querySelectorAll('.fade').forEach(el=>observer.observe(el));
+$("dNew").onclick=()=>{$("done").hidden=true;$("lf").hidden=false};
+const hdr=$("hdr");addEventListener("scroll",()=>hdr.classList.toggle("sc",scrollY>8),{passive:true});
+const io=new IntersectionObserver(es=>es.forEach(en=>{const v=en.target;if(en.isIntersecting){if(v.dataset.src&&!v.src){v.src=v.dataset.src}v.play().catch(()=>{})}else v.pause()}),{rootMargin:"120px"});
+document.querySelectorAll("video").forEach(v=>{if(matchMedia("(prefers-reduced-motion: reduce)").matches){v.removeAttribute("autoplay");return}io.observe(v)});
+setLang(st.lang);
 </script>
-
-</body>
-</html>
+</body></html>
